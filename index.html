@@ -404,7 +404,7 @@ auth.onAuthStateChanged(async user => {
 
 async function loginGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
-  provider.setCustomParameters({ hd: ALLOWED_DOMAIN.replace('@','') });
+
   try {
     await auth.signInWithPopup(provider);
   } catch(e) {
