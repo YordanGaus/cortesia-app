@@ -5,110 +5,99 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CortesíaApp — Sistema de Deméritos</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<!-- PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{
-  --bg:#060f1c;--s1:#0c1929;--s2:#112236;--s3:#172d47;
-  --bd:#1a3050;--bd2:#1f3a5f;
-  --ac:#2563eb;--ac2:#0891b2;--ac3:#7c3aed;
-  --wa:#d97706;--da:#dc2626;--su:#059669;
-  --tx:#dbeafe;--mu:#4b7098;--go:#d97706;
+  --bg:#05101f;--s1:#0a1929;--s2:#0f2337;--s3:#152d47;
+  --bd:#173050;--bd2:#1d3d5e;
+  --ac:#1d6bf0;--ac2:#0ea5c9;--ac3:#7c3aed;
+  --wa:#c77b0a;--da:#d93030;--su:#0d9870;
+  --tx:#d8effe;--mu:#4a7094;--go:#d4960a;
   --fn:'Sora',sans-serif;--mo:'JetBrains Mono',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:var(--fn);background:var(--bg);color:var(--tx);min-height:100vh;}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
 
-/* ── SPLASH ── */
-#splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:20px;}
-#splash .logo{width:72px;height:72px;background:linear-gradient(135deg,var(--ac),var(--ac2));border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(37,99,235,.4)}50%{box-shadow:0 0 0 16px rgba(37,99,235,0)}}
-#splash h1{font-size:26px;font-weight:800;}
-#splash p{font-size:13px;color:var(--mu);}
-#splash .loader{width:200px;height:3px;background:var(--bd);border-radius:2px;overflow:hidden;}
-#splash .loader::after{content:'';display:block;width:60%;height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2));border-radius:2px;animation:load 1.5s ease-in-out infinite;}
-@keyframes load{0%{transform:translateX(-100%)}100%{transform:translateX(200%)}}
+/* SPLASH */
+#splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:18px;}
+.sp-logo{width:68px;height:68px;background:linear-gradient(135deg,var(--ac),var(--ac2));border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:30px;animation:pp 2s ease-in-out infinite;}
+@keyframes pp{0%,100%{box-shadow:0 0 0 0 rgba(29,107,240,.4)}50%{box-shadow:0 0 0 18px rgba(29,107,240,0)}}
+.sp-bar{width:180px;height:3px;background:var(--bd);border-radius:2px;overflow:hidden;}
+.sp-bar::after{content:'';display:block;height:100%;width:55%;background:linear-gradient(90deg,var(--ac),var(--ac2));border-radius:2px;animation:sl 1.4s ease-in-out infinite;}
+@keyframes sl{0%{transform:translateX(-100%)}100%{transform:translateX(220%)};}
 
-/* ── LOGIN ── */
-#login{position:fixed;inset:0;background:var(--bg);display:none;align-items:center;justify-content:center;z-index:9998;}
-#login::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 60%,rgba(37,99,235,.07),transparent 55%),radial-gradient(ellipse at 75% 25%,rgba(124,58,237,.05),transparent 50%);pointer-events:none;}
-.login-box{background:var(--s1);border:1px solid var(--bd2);border-radius:22px;padding:52px 48px;width:420px;text-align:center;position:relative;}
-.lb-logo{width:60px;height:60px;background:linear-gradient(135deg,var(--ac),var(--ac2));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 18px;}
-.lb-title{font-size:24px;font-weight:800;margin-bottom:6px;}
-.lb-sub{font-size:12px;color:var(--mu);margin-bottom:8px;line-height:1.6;}
-.lb-domain{display:inline-block;background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.25);color:var(--ac2);font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:28px;font-family:var(--mo);}
-.g-btn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:14px;background:#fff;color:#1f2937;border:none;border-radius:10px;font-family:var(--fn);font-size:14px;font-weight:600;cursor:pointer;transition:.2s;}
-.g-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,255,255,.12);}
-.lb-warn{font-size:11px;color:var(--mu);margin-top:18px;}
-.lb-warn b{color:var(--da);}
+/* LOGIN */
+#login{position:fixed;inset:0;background:var(--bg);display:none;align-items:center;justify-content:center;z-index:9990;}
+#login::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 25% 65%,rgba(29,107,240,.07),transparent 55%),radial-gradient(ellipse at 80% 20%,rgba(124,58,237,.05),transparent 50%);pointer-events:none;}
+.lbox{background:var(--s1);border:1px solid var(--bd2);border-radius:22px;padding:50px 46px;width:410px;text-align:center;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.6);}
+.l-ico{width:58px;height:58px;background:linear-gradient(135deg,var(--ac),var(--ac2));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 16px;}
+.l-title{font-size:22px;font-weight:800;margin-bottom:5px;}
+.l-sub{font-size:12px;color:var(--mu);margin-bottom:8px;line-height:1.7;}
+.l-dom{display:inline-block;background:rgba(29,107,240,.12);border:1px solid rgba(29,107,240,.25);color:var(--ac2);font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;margin-bottom:26px;font-family:var(--mo);}
+.g-btn{display:flex;align-items:center;justify-content:center;gap:11px;width:100%;padding:13px;background:#fff;color:#1a202c;border:none;border-radius:10px;font-family:var(--fn);font-size:13px;font-weight:600;cursor:pointer;transition:.2s;}
+.g-btn:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(255,255,255,.12);}
+.g-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.l-note{font-size:10px;color:var(--mu);margin-top:14px;}
+.l-err{background:rgba(217,48,48,.1);border:1px solid rgba(217,48,48,.3);color:#f87171;border-radius:8px;padding:9px 12px;font-size:11px;margin-top:12px;display:none;}
 
-/* ── APP SHELL ── */
-#app{display:none;min-height:100vh;flex-direction:column;}
+/* APP */
+#app{display:none;min-height:100vh;}
+.role-bar{height:30px;background:linear-gradient(90deg,rgba(29,107,240,.15),rgba(14,165,201,.08));border-bottom:1px solid rgba(29,107,240,.15);display:flex;align-items:center;padding:0 22px;gap:10px;font-size:10px;color:var(--mu);}
+.rpill{padding:2px 9px;border-radius:20px;font-weight:700;font-size:9px;font-family:var(--mo);}
+.rpill.admin{background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.3);color:#a78bfa;}
+.rpill.docente{background:rgba(29,107,240,.2);border:1px solid rgba(29,107,240,.3);color:#60a5fa;}
+.shell{display:flex;min-height:calc(100vh - 30px);}
 
-/* ── ROLE BANNER ── */
-.role-banner{background:linear-gradient(90deg,rgba(37,99,235,.2),rgba(8,145,178,.1));border-bottom:1px solid rgba(37,99,235,.2);padding:6px 24px;font-size:11px;color:var(--ac2);display:flex;align-items:center;gap:8px;}
-.role-pill{background:rgba(37,99,235,.2);border:1px solid rgba(37,99,235,.3);border-radius:20px;padding:2px 10px;font-weight:700;font-family:var(--mo);}
-.role-pill.admin{background:rgba(124,58,237,.2);border-color:rgba(124,58,237,.3);color:#a78bfa;}
-
-/* ── LAYOUT ── */
-.shell{display:flex;flex:1;min-height:calc(100vh - 32px);}
-.sidebar{width:252px;background:var(--s1);border-right:1px solid var(--bd);display:flex;flex-direction:column;position:fixed;height:calc(100vh - 32px);top:32px;z-index:100;}
-.main{margin-left:252px;flex:1;display:flex;flex-direction:column;}
-
-/* ── SIDEBAR ── */
-.sb-top{padding:20px 18px 14px;border-bottom:1px solid var(--bd);}
-.sb-brand{display:flex;align-items:center;gap:9px;}
-.sb-ico{width:34px;height:34px;background:linear-gradient(135deg,var(--ac),var(--ac2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+/* SIDEBAR */
+.sb{width:248px;background:var(--s1);border-right:1px solid var(--bd);display:flex;flex-direction:column;position:fixed;height:calc(100vh - 30px);top:30px;z-index:100;transition:.3s;}
+.sb-brand{padding:18px 16px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:9px;}
+.sb-ico{width:32px;height:32px;background:linear-gradient(135deg,var(--ac),var(--ac2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
 .sb-nm{font-size:12px;font-weight:700;line-height:1.3;}
-.sb-nm span{display:block;color:var(--mu);font-weight:400;font-size:10px;}
-.sb-usr{padding:10px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:9px;}
-.usr-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--ac3),var(--ac));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;overflow:hidden;flex-shrink:0;}
-.usr-av img{width:100%;height:100%;object-fit:cover;}
-.usr-nm{font-size:11px;font-weight:600;line-height:1.3;}
-.usr-em{font-size:9px;color:var(--mu);}
-.nav{padding:10px 9px;flex:1;overflow-y:auto;}
-.ns{font-size:9px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;padding:7px 9px 3px;}
-.ni{display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:500;color:var(--mu);transition:.15s;margin-bottom:1px;border:1px solid transparent;}
+.sb-nm small{display:block;color:var(--mu);font-weight:400;font-size:9px;}
+.sb-user{padding:10px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:9px;}
+.sb-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--ac3),var(--ac));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;overflow:hidden;flex-shrink:0;}
+.sb-av img{width:100%;height:100%;object-fit:cover;}
+.sb-un{font-size:11px;font-weight:600;line-height:1.3;}
+.sb-ue{font-size:9px;color:var(--mu);}
+.nav{padding:8px;flex:1;overflow-y:auto;}
+.nsec{font-size:9px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;padding:7px 8px 3px;}
+.ni{display:flex;align-items:center;gap:8px;padding:8px;border-radius:7px;cursor:pointer;font-size:11px;font-weight:500;color:var(--mu);transition:.12s;margin-bottom:1px;border:1px solid transparent;}
 .ni:hover{background:var(--s2);color:var(--tx);}
-.ni.on{background:linear-gradient(135deg,rgba(37,99,235,.18),rgba(8,145,178,.08));color:var(--ac);border-color:rgba(37,99,235,.2);}
-.ni .ic{font-size:14px;width:17px;text-align:center;}
-.nb{margin-left:auto;background:var(--da);color:#fff;font-size:9px;padding:1px 6px;border-radius:20px;font-weight:700;}
-.sb-bot{padding:9px;border-top:1px solid var(--bd);}
+.ni.on{background:linear-gradient(135deg,rgba(29,107,240,.18),rgba(14,165,201,.07));color:var(--ac);border-color:rgba(29,107,240,.2);}
+.ni .ic{font-size:13px;width:16px;text-align:center;}
+.nbadge{margin-left:auto;background:var(--da);color:#fff;font-size:8px;padding:1px 5px;border-radius:20px;font-weight:700;}
+.sb-bot{padding:8px;border-top:1px solid var(--bd);}
 
-/* ── TOPBAR ── */
-.topbar{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 26px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:32px;z-index:50;}
-.tb-t{font-size:16px;font-weight:700;}
+/* TOPBAR */
+.topbar{background:var(--s1);border-bottom:1px solid var(--bd);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:30px;z-index:50;}
+.tb-t{font-size:15px;font-weight:700;}
 .tb-t span{color:var(--ac);}
-.tb-r{display:flex;align-items:center;gap:9px;}
+.tb-r{display:flex;align-items:center;gap:8px;}
 
-/* ── CONTENT ── */
-.content{padding:26px;flex:1;}
-.pg{display:none;animation:fup .3s ease;}
-.pg.on{display:block;}
-@keyframes fup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* MAIN */
+.main{margin-left:248px;flex:1;display:flex;flex-direction:column;}
+.content{padding:24px;flex:1;}
 
-/* ── BUTTONS ── */
-.btn{padding:7px 14px;border-radius:7px;border:none;cursor:pointer;font-family:var(--fn);font-size:11px;font-weight:600;transition:.2s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;}
+/* BUTTONS */
+.btn{padding:7px 13px;border-radius:7px;border:none;cursor:pointer;font-family:var(--fn);font-size:11px;font-weight:600;transition:.15s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;}
 .btn:hover:not(:disabled){transform:translateY(-1px);}
-.btn:disabled{opacity:.5;cursor:not-allowed;}
-.bp{background:var(--ac);color:#fff;}
-.bp:hover:not(:disabled){background:#1d4ed8;}
-.bg2{background:transparent;color:var(--mu);border:1px solid var(--bd2);}
-.bg2:hover:not(:disabled){color:var(--tx);border-color:var(--ac);}
-.bd2c{background:rgba(220,38,38,.15);color:var(--da);border:1px solid rgba(220,38,38,.25);}
-.bsc{background:rgba(5,150,105,.15);color:var(--su);border:1px solid rgba(5,150,105,.25);}
-.bwc{background:rgba(217,119,6,.15);color:var(--wa);border:1px solid rgba(217,119,6,.25);}
-.bpc{background:rgba(124,58,237,.2);color:#a78bfa;border:1px solid rgba(124,58,237,.3);}
-.bsm{padding:4px 9px;font-size:10px;}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important;}
+.bp{background:var(--ac);color:#fff;} .bp:hover:not(:disabled){background:#1559d4;}
+.bg2{background:transparent;color:var(--mu);border:1px solid var(--bd2);} .bg2:hover:not(:disabled){color:var(--tx);border-color:var(--ac);}
+.bdr{background:rgba(217,48,48,.15);color:var(--da);border:1px solid rgba(217,48,48,.25);}
+.bsu{background:rgba(13,152,112,.15);color:var(--su);border:1px solid rgba(13,152,112,.25);}
+.bwa{background:rgba(199,123,10,.15);color:var(--wa);border:1px solid rgba(199,123,10,.25);}
+.bpu{background:rgba(124,58,237,.18);color:#a78bfa;border:1px solid rgba(124,58,237,.28);}
+.bsm{padding:4px 8px;font-size:10px;}
 
-/* ── STATS ── */
-.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:22px;}
-.sc{background:var(--s1);border:1px solid var(--bd);border-radius:11px;padding:16px;position:relative;overflow:hidden;transition:.2s;}
+/* CARDS / STATS */
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:11px;margin-bottom:20px;}
+.sc{background:var(--s1);border:1px solid var(--bd);border-radius:11px;padding:15px;position:relative;overflow:hidden;transition:.2s;}
 .sc:hover{transform:translateY(-2px);border-color:var(--bd2);}
 .sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
 .scb::before{background:linear-gradient(90deg,var(--ac),var(--ac2));}
@@ -116,238 +105,230 @@ body{font-family:var(--fn);background:var(--bg);color:var(--tx);min-height:100vh
 .scg::before{background:linear-gradient(90deg,var(--su),#16a34a);}
 .sco::before{background:linear-gradient(90deg,var(--wa),#d97706);}
 .scp::before{background:linear-gradient(90deg,var(--ac3),#9333ea);}
-.sc-em{font-size:22px;margin-bottom:8px;}
-.sc-v{font-size:28px;font-weight:800;font-family:var(--mo);line-height:1;}
-.sc-l{font-size:10px;color:var(--mu);margin-top:3px;}
-
-/* ── CARD ── */
-.card{background:var(--s1);border:1px solid var(--bd);border-radius:11px;overflow:hidden;margin-bottom:16px;}
-.ch{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px;}
+.sc-e{font-size:20px;margin-bottom:7px;}
+.sc-v{font-size:26px;font-weight:800;font-family:var(--mo);line-height:1;}
+.sc-l{font-size:10px;color:var(--mu);margin-top:2px;}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:11px;overflow:hidden;margin-bottom:14px;}
+.ch{padding:13px 17px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;}
 .ct{font-size:12px;font-weight:700;}
-.cb{padding:18px;}
+.cb{padding:16px;}
 
-/* ── TABLE ── */
+/* TABLE */
 .tw{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;font-size:11px;}
-thead th{text-align:left;padding:8px 13px;font-size:9px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--bd);background:rgba(255,255,255,.015);}
-tbody td{padding:10px 13px;border-bottom:1px solid rgba(26,48,80,.4);vertical-align:middle;}
-tbody tr:hover td{background:rgba(37,99,235,.04);}
+thead th{text-align:left;padding:8px 12px;font-size:9px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--bd);background:rgba(255,255,255,.01);}
+tbody td{padding:9px 12px;border-bottom:1px solid rgba(23,48,80,.4);vertical-align:middle;}
+tbody tr:hover td{background:rgba(29,107,240,.04);}
 tbody tr:last-child td{border-bottom:none;}
 
-/* ── BADGE ── */
-.bx{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:700;}
-.bxg{background:rgba(5,150,105,.15);color:#34d399;}
-.bxy{background:rgba(217,119,6,.15);color:#fbbf24;}
+/* BADGES */
+.bx{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:9px;font-weight:700;}
+.bxg{background:rgba(13,152,112,.15);color:#34d399;}
+.bxy{background:rgba(199,123,10,.15);color:#fbbf24;}
 .bxo{background:rgba(234,88,12,.15);color:#fb923c;}
-.bxr{background:rgba(220,38,38,.15);color:#f87171;}
-.bxb{background:rgba(37,99,235,.15);color:#60a5fa;}
+.bxr{background:rgba(217,48,48,.15);color:#f87171;}
+.bxb{background:rgba(29,107,240,.15);color:#60a5fa;}
 .bxp{background:rgba(124,58,237,.15);color:#a78bfa;}
-.bxgold{background:rgba(217,119,6,.15);color:#fbbf24;}
+.bxgo{background:rgba(212,150,10,.15);color:#fbbf24;}
 
-/* ── DBAR ── */
-.db{display:flex;align-items:center;gap:6px;}
-.db-b{flex:1;height:4px;background:var(--bd);border-radius:2px;overflow:hidden;max-width:65px;}
+/* DBAR */
+.db{display:flex;align-items:center;gap:5px;}
+.db-b{flex:1;height:4px;background:var(--bd);border-radius:2px;overflow:hidden;max-width:60px;}
 .db-f{height:100%;border-radius:2px;transition:width .5s;}
 .db-n{font-size:11px;font-weight:700;font-family:var(--mo);min-width:18px;}
 
-/* ── AVATAR ── */
-.av{display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:700;flex-shrink:0;}
+/* AVATAR */
+.av{display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:700;flex-shrink:0;color:#fff;}
 
-/* ── MODAL ── */
-.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);z-index:1000;align-items:center;justify-content:center;padding:14px;}
-.mo.on{display:flex;animation:fup .2s ease;}
-.mb{background:var(--s1);border:1px solid var(--bd2);border-radius:15px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;}
-.mh{padding:20px 24px 0;}
-.mh h3{font-size:16px;font-weight:700;}
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(8px);z-index:1000;align-items:center;justify-content:center;padding:12px;}
+.mo.on{display:flex;animation:fu .2s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.mb{background:var(--s1);border:1px solid var(--bd2);border-radius:15px;width:100%;max-width:560px;max-height:94vh;overflow-y:auto;}
+.mb-lg{max-width:700px;}
+.mh{padding:20px 22px 0;}
+.mh h3{font-size:15px;font-weight:700;}
 .mh p{color:var(--mu);font-size:11px;margin-top:3px;}
-.mc{padding:18px 24px;}
-.mf{padding:0 24px 20px;display:flex;gap:8px;justify-content:flex-end;}
+.mc{padding:16px 22px;}
+.mf{padding:0 22px 18px;display:flex;gap:7px;justify-content:flex-end;}
 
-/* ── FORM ── */
-.fg{margin-bottom:13px;}
+/* FORM */
+.fg{margin-bottom:12px;}
 .fl{display:block;font-size:9px;font-weight:700;color:var(--mu);margin-bottom:4px;text-transform:uppercase;letter-spacing:.07em;}
 .fc{width:100%;background:var(--bg);border:1px solid var(--bd2);border-radius:7px;padding:8px 11px;color:var(--tx);font-family:var(--fn);font-size:11px;transition:.2s;}
-.fc:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 3px rgba(37,99,235,.1);}
+.fc:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 3px rgba(29,107,240,.1);}
+.fc.req{border-color:var(--da)!important;}
+textarea.fc{resize:vertical;min-height:70px;line-height:1.6;}
 select.fc option{background:var(--s2);}
 .r2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
 .r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
 
-/* ── CHIPS ── */
+/* CHIPS */
 .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;}
-.chip{padding:4px 10px;border-radius:20px;background:var(--bg);border:1px solid var(--bd2);font-size:10px;cursor:pointer;transition:.15s;color:var(--mu);}
-.chip:hover,.chip.sel{background:rgba(37,99,235,.15);border-color:var(--ac);color:var(--ac);}
-.chip.selg{background:rgba(5,150,105,.15);border-color:var(--su);color:#34d399;}
+.chip{padding:4px 10px;border-radius:20px;background:var(--bg);border:1px solid var(--bd2);font-size:10px;cursor:pointer;transition:.12s;color:var(--mu);}
+.chip:hover,.chip.sel{background:rgba(29,107,240,.15);border-color:var(--ac);color:var(--ac);}
+.chip.selg{background:rgba(13,152,112,.15);border-color:var(--su);color:#34d399;}
 
-/* ── UPLOAD ── */
-.uz{border:2px dashed var(--bd2);border-radius:11px;padding:36px 18px;text-align:center;cursor:pointer;transition:.2s;background:var(--bg);}
-.uz:hover,.uz.drag{border-color:var(--ac);background:rgba(37,99,235,.04);}
-.uz input{display:none;}
-
-/* ── TOAST ── */
-.tc{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:6px;}
-.tt{background:var(--s1);border:1px solid var(--bd2);border-radius:9px;padding:10px 15px;font-size:11px;min-width:240px;display:flex;align-items:center;gap:7px;box-shadow:0 8px 32px rgba(0,0,0,.5);animation:slr .3s ease;}
+/* TOAST */
+.tc{position:fixed;bottom:18px;right:18px;z-index:9999;display:flex;flex-direction:column;gap:6px;}
+.tt{background:var(--s1);border:1px solid var(--bd2);border-radius:9px;padding:10px 14px;font-size:11px;min-width:240px;display:flex;align-items:center;gap:7px;box-shadow:0 8px 30px rgba(0,0,0,.5);animation:slr .3s ease;}
 @keyframes slr{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
 .tts{border-left:3px solid var(--su);}
 .tte{border-left:3px solid var(--da);}
 .tti{border-left:3px solid var(--ac);}
 
-/* ── HONOR ── */
-.hg{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:11px;}
-.hc{background:var(--bg);border:1px solid rgba(217,119,6,.15);border-radius:11px;padding:16px;text-align:center;transition:.2s;}
+/* LOADING */
+.lov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:2000;align-items:center;justify-content:center;flex-direction:column;gap:14px;}
+.lov.on{display:flex;}
+.spin{width:38px;height:38px;border:3px solid var(--bd2);border-top-color:var(--ac);border-radius:50%;animation:sp 1s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* HONOR */
+.hg{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:10px;}
+.hc{background:var(--bg);border:1px solid rgba(212,150,10,.15);border-radius:10px;padding:14px;text-align:center;transition:.2s;}
 .hc:hover{transform:translateY(-2px);border-color:var(--go);}
 
-/* ── ACCESS DENIED ── */
-.denied{text-align:center;padding:60px 20px;color:var(--mu);}
-.denied .ico{font-size:48px;margin-bottom:12px;}
+/* ALERT BOXES */
+.al{padding:9px 13px;border-radius:7px;font-size:10px;border-left:3px solid;margin-top:8px;line-height:1.6;}
+.al-w{background:rgba(199,123,10,.1);border-color:var(--wa);color:#fbbf24;}
+.al-o{background:rgba(234,88,12,.1);border-color:#ea580c;color:#fb923c;}
+.al-r{background:rgba(217,48,48,.1);border-color:var(--da);color:#f87171;}
+.al-c{background:rgba(124,58,237,.1);border-color:#7c3aed;color:#a78bfa;}
 
-/* ── SEARCH ── */
-.sb-s{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
-.si{flex:1;min-width:180px;background:var(--s1);border:1px solid var(--bd);border-radius:7px;padding:8px 11px 8px 30px;color:var(--tx);font-family:var(--fn);font-size:11px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' fill='%234b7098' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.867-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:9px center;transition:.2s;}
+/* MISC */
+.sp{display:inline-flex;align-items:center;padding:2px 7px;background:var(--s2);border-radius:5px;font-size:10px;font-weight:600;color:var(--mu);}
+.sb-s{display:flex;gap:7px;margin-bottom:13px;flex-wrap:wrap;}
+.si{flex:1;min-width:170px;background:var(--s1);border:1px solid var(--bd);border-radius:7px;padding:8px 11px 8px 28px;color:var(--tx);font-family:var(--fn);font-size:11px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%234a7094' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.242 1.406a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:9px center;transition:.2s;}
 .si:focus{outline:none;border-color:var(--ac);}
+.divider{height:1px;background:var(--bd);margin:12px 0;}
+.log-entry{background:var(--bg);border:1px solid var(--bd);border-radius:9px;padding:13px;margin-bottom:9px;}
+.log-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;flex-wrap:wrap;gap:5px;}
+.log-desc{font-size:11px;line-height:1.6;color:var(--tx);}
+.correctivo-box{background:rgba(199,123,10,.08);border:1px solid rgba(199,123,10,.2);border-radius:9px;padding:12px;margin-top:10px;}
 
-/* RESPONSIVE */
 @media(max-width:768px){
-  .sidebar{transform:translateX(-252px);}
-  .sidebar.open{transform:translateX(0);}
+  .sb{transform:translateX(-248px);}
   .main{margin-left:0;}
   .sg{grid-template-columns:1fr 1fr;}
   .content{padding:14px;}
   .r2,.r3{grid-template-columns:1fr;}
 }
-
-.sp{display:inline-flex;align-items:center;padding:2px 8px;background:var(--s2);border-radius:5px;font-size:10px;font-weight:600;color:var(--mu);}
-.divider{height:1px;background:var(--bd);margin:14px 0;}
-
-/* ── LOADING OVERLAY ── */
-.loading-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2000;align-items:center;justify-content:center;flex-direction:column;gap:14px;}
-.loading-overlay.on{display:flex;}
-.spin{width:40px;height:40px;border:3px solid var(--bd2);border-top-color:var(--ac);border-radius:50%;animation:spin 1s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 
 <!-- SPLASH -->
 <div id="splash">
-  <div class="logo">🏫</div>
-  <h1>CortesíaApp</h1>
-  <p>Iniciando sistema...</p>
-  <div class="loader"></div>
+  <div class="sp-logo">🏫</div>
+  <h2 style="font-size:22px;font-weight:800">CortesíaApp</h2>
+  <p style="font-size:12px;color:var(--mu)">Iniciando sistema...</p>
+  <div class="sp-bar"></div>
 </div>
 
 <!-- LOGIN -->
 <div id="login">
-  <div class="login-box">
-    <div class="lb-logo">🏫</div>
-    <div class="lb-title">CortesíaApp</div>
-    <div class="lb-sub">Sistema Oficial de Control de Deméritos<br>Ministerio de Educación · El Salvador 2025</div>
-    <div class="lb-domain" id="domain-badge">@clases.edu.sv</div>
-    <button class="g-btn" onclick="loginGoogle()">
-      <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+  <div class="lbox">
+    <div class="l-ico">🏫</div>
+    <div class="l-title">CortesíaApp</div>
+    <div class="l-sub">Sistema Oficial de Control de Deméritos<br>Memorándum N.° 06-2025 · MINEDUCYT</div>
+    <div class="l-dom" id="dom-badge">@clases.edu.sv</div>
+    <button class="g-btn" id="login-btn" onclick="doLogin()">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
       Iniciar sesión con Google Workspace
     </button>
-    <div class="lb-warn">Solo correos <b id="warn-domain">@clases.edu.sv</b> tienen acceso.</div>
+    <div class="l-err" id="l-err"></div>
+    <div class="l-note">Solo se permite el dominio <strong style="color:var(--ac2)" id="dom-note">@clases.edu.sv</strong></div>
   </div>
 </div>
 
-<!-- LOADING OVERLAY -->
-<div class="loading-overlay" id="loading-overlay">
-  <div class="spin"></div>
-  <div style="font-size:13px;color:var(--mu)" id="loading-msg">Cargando...</div>
-</div>
+<!-- LOADING -->
+<div class="lov" id="lov"><div class="spin"></div><div style="font-size:12px;color:var(--mu)" id="lov-msg">Cargando...</div></div>
 
 <!-- APP -->
 <div id="app">
-  <div class="role-banner" id="role-banner"></div>
+  <div class="role-bar" id="role-bar"></div>
   <div class="shell">
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sb-top">
-        <div class="sb-brand">
-          <div class="sb-ico">🏫</div>
-          <div class="sb-nm">CortesíaApp <span id="ce-nombre-sb">Centro Escolar</span></div>
-        </div>
+    <aside class="sb" id="sb">
+      <div class="sb-brand">
+        <div class="sb-ico">🏫</div>
+        <div class="sb-nm" id="sb-ce">CortesíaApp <small>Centro Escolar</small></div>
       </div>
-      <div class="sb-usr" id="sb-usr"></div>
-      <nav class="nav" id="main-nav">
-        <!-- Filled by JS based on role -->
-      </nav>
+      <div class="sb-user" id="sb-user"></div>
+      <nav class="nav" id="nav"></nav>
       <div class="sb-bot">
-        <div class="ni" onclick="logout()" style="color:var(--da)"><span class="ic">🚪</span>Cerrar sesión</div>
+        <div class="ni" onclick="doLogout()" style="color:var(--da)"><span class="ic">🚪</span>Cerrar sesión</div>
       </div>
     </aside>
-
-    <!-- MAIN -->
     <div class="main">
       <header class="topbar">
-        <div class="tb-t" id="page-title">Dashboard</div>
-        <div class="tb-r" id="topbar-actions"></div>
+        <div class="tb-t" id="pg-title">Dashboard</div>
+        <div class="tb-r" id="tb-r"></div>
       </header>
-      <div class="content" id="main-content">
-        <!-- Pages rendered here by JS -->
-      </div>
+      <div class="content" id="content"></div>
     </div>
   </div>
 </div>
 
-<!-- TOASTS -->
+<!-- TOAST -->
 <div class="tc" id="toasts"></div>
 
 <!-- MODALS -->
-<div class="mo" id="mo-alumno">
+<!-- Alumno -->
+<div class="mo" id="mo-alum">
   <div class="mb">
-    <div class="mh"><h3>👨‍🎓 Agregar Alumno</h3><p>Registro manual de estudiante</p></div>
+    <div class="mh"><h3>👨‍🎓 Agregar Alumno</h3></div>
     <div class="mc">
-      <div class="fg"><label class="fl">Nombre Completo</label><input class="fc" id="ma-nombre" placeholder="Apellidos Nombres"></div>
+      <div class="fg"><label class="fl">Nombre Completo</label><input class="fc" id="ma-n" placeholder="Apellidos y Nombres"></div>
       <div class="r2">
         <div class="fg"><label class="fl">NIE</label><input class="fc" id="ma-nie" placeholder="N° identificación"></div>
-        <div class="fg"><label class="fl">Sexo</label><select class="fc" id="ma-sexo"><option value="M">Masculino (M)</option><option value="H">Femenino (H)</option></select></div>
+        <div class="fg"><label class="fl">Sexo</label><select class="fc" id="ma-sx"><option value="M">Masculino (M)</option><option value="H">Femenino (H)</option></select></div>
       </div>
       <div class="r2">
-        <div class="fg"><label class="fl">Grado</label><select class="fc" id="ma-grado"><option>1° Parvularia</option><option>2° Parvularia</option><option>3° Parvularia</option><option>1° Básico</option><option>2° Básico</option><option>3° Básico</option><option>4° Básico</option><option>5° Básico</option><option>6° Básico</option><option>7° Básico</option><option>8° Básico</option><option>9° Básico</option><option>1° Bachillerato</option><option>2° Bachillerato</option><option>3° Bachillerato</option></select></div>
+        <div class="fg"><label class="fl">Grado</label><select class="fc" id="ma-gr"><option>1° Parvularia</option><option>2° Parvularia</option><option>3° Parvularia</option><option>1° Básico</option><option>2° Básico</option><option>3° Básico</option><option>4° Básico</option><option>5° Básico</option><option>6° Básico</option><option>7° Básico</option><option>8° Básico</option><option>9° Básico</option><option>1° Bachillerato</option><option>2° Bachillerato</option><option>3° Bachillerato</option></select></div>
         <div class="fg"><label class="fl">Sección</label><select class="fc" id="ma-sec"></select></div>
       </div>
-      <div class="fg"><label class="fl">N° de Lista</label><input type="number" class="fc" id="ma-lista" min="1"></div>
+      <div class="fg"><label class="fl">N° de Lista</label><input type="number" class="fc" id="ma-lst" min="1" style="width:90px"></div>
     </div>
-    <div class="mf"><button class="btn bg2" onclick="closeModal('mo-alumno')">Cancelar</button><button class="btn bp" onclick="agregarAlumno()">Guardar</button></div>
+    <div class="mf"><button class="btn bg2" onclick="cm('mo-alum')">Cancelar</button><button class="btn bp" onclick="addAlumno()">Guardar</button></div>
   </div>
 </div>
-
-<div class="mo" id="mo-docente">
-  <div class="mb">
-    <div class="mh"><h3>👩‍🏫 Docente Guía</h3><p>Registrar o editar docente</p></div>
-    <div class="mc">
-      <div class="fg"><label class="fl">Nombre Completo</label><input class="fc" id="mdoc-nombre" placeholder="Ej: Lcda. Ana Martínez"></div>
-      <div class="fg"><label class="fl">Correo Institucional</label><input class="fc" id="mdoc-correo" placeholder="correo@clases.edu.sv"></div>
-      <div class="fg"><label class="fl">Especialidad</label><input class="fc" id="mdoc-esp" placeholder="Ej: Matemáticas"></div>
-      <div class="fg"><label class="fl">Secciones que Guía (puede elegir varias)</label><select class="fc" id="mdoc-secs" multiple style="height:100px"></select><div style="font-size:9px;color:var(--mu);margin-top:4px">Ctrl+Click para seleccionar varias</div></div>
-    </div>
-    <div class="mf"><button class="btn bg2" onclick="closeModal('mo-docente')">Cancelar</button><button class="btn bp" onclick="guardarDocente()">Guardar</button></div>
-  </div>
-</div>
-
-<div class="mo" id="mo-seccion">
+<!-- Seccion -->
+<div class="mo" id="mo-sec">
   <div class="mb">
     <div class="mh"><h3>🏫 Nueva Sección</h3></div>
     <div class="mc">
       <div class="r2">
-        <div class="fg"><label class="fl">Nombre Sección</label><input class="fc" id="msec-nombre" placeholder="Ej: 7° A"></div>
-        <div class="fg"><label class="fl">Grado</label><input class="fc" id="msec-grado" placeholder="Ej: 7° Básico"></div>
+        <div class="fg"><label class="fl">Nombre</label><input class="fc" id="ms-n" placeholder="Ej: 7° A"></div>
+        <div class="fg"><label class="fl">Grado</label><input class="fc" id="ms-gr" placeholder="Ej: 7° Básico"></div>
       </div>
       <div class="r2">
-        <div class="fg"><label class="fl">Turno</label><select class="fc" id="msec-turno"><option>Matutino</option><option>Vespertino</option><option>Nocturno</option></select></div>
-        <div class="fg"><label class="fl">Docente Guía</label><select class="fc" id="msec-doc"></select></div>
+        <div class="fg"><label class="fl">Turno</label><select class="fc" id="ms-t"><option>Matutino</option><option>Vespertino</option><option>Nocturno</option></select></div>
+        <div class="fg"><label class="fl">Docente Guía</label><select class="fc" id="ms-d"></select></div>
       </div>
     </div>
-    <div class="mf"><button class="btn bg2" onclick="closeModal('mo-seccion')">Cancelar</button><button class="btn bp" onclick="guardarSeccion()">Crear</button></div>
+    <div class="mf"><button class="btn bg2" onclick="cm('mo-sec')">Cancelar</button><button class="btn bp" onclick="addSeccion()">Crear</button></div>
+  </div>
+</div>
+<!-- Docente -->
+<div class="mo" id="mo-doc">
+  <div class="mb">
+    <div class="mh"><h3>👩‍🏫 Docente Guía</h3><p>Asignar secciones donde imparte clases</p></div>
+    <div class="mc">
+      <div class="fg"><label class="fl">Nombre Completo</label><input class="fc" id="md-n" placeholder="Ej: Lcda. Ana Martínez"></div>
+      <div class="fg"><label class="fl">Correo Institucional</label><input class="fc" id="md-e" placeholder="correo@clases.edu.sv"></div>
+      <div class="fg"><label class="fl">Especialidad</label><input class="fc" id="md-esp" placeholder="Ej: Matemáticas"></div>
+      <div class="fg"><label class="fl">Sección Guía (una)</label><select class="fc" id="md-sg"></select></div>
+      <div class="fg"><label class="fl">Secciones donde imparte clases (Ctrl+clic para varias)</label><select class="fc" id="md-ss" multiple style="height:90px"></select></div>
+    </div>
+    <div class="mf"><button class="btn bg2" onclick="cm('mo-doc')">Cancelar</button><button class="btn bp" onclick="saveDocente()">Guardar</button></div>
   </div>
 </div>
 
 <script>
-// ══════════════════════════════════════════════════════
-//  !! CONFIGURACIÓN FIREBASE — REEMPLAZA CON TUS DATOS !!
-// ══════════════════════════════════════════════════════
-const firebaseConfig = {
+// ════════════════════════════════════
+//  !! REEMPLAZA ESTOS VALORES !!
+// ════════════════════════════════════
+const FB_CFG = {
   apiKey: "AIzaSyA5NcmKzs7CtfBv9c2rSTxsb3cZA_8o6TM",
   authDomain: "cortesia-escolar.firebaseapp.com",
   projectId: "cortesia-escolar",
@@ -355,1262 +336,1313 @@ const firebaseConfig = {
   messagingSenderId: "1032594967428",
   appId: "1:1032594967428:web:9660c53b8361fdc727ebd1"
 };
+const DOMAIN       = "@clases.edu.sv";   // dominio permitido
+const ADMIN_EMAILS = ["yordan.flores.granados@clases.edu.sv","sigfredo.jose.jurado@clases.edu.sv","sonia.haydee.aguilar@clases.edu.sv"]; // admin completo
 
-const ALLOWED_DOMAIN = "@clases.edu.sv"; // ← cambia si tu dominio es otro
-const ADMIN_EMAILS   = ["yordan.flores.granados@clases.edu.sv","sigfredo.jose.zelaya@clases.edu.sv","sonia.haydee.aguilar@clases.edu.sv"]; // ← correos que serán admin
-
-// ══════════════════════════════════════════════════════
+// ════════════════════════════════════
 //  FIREBASE INIT
-// ══════════════════════════════════════════════════════
-firebase.initializeApp(firebaseConfig);
+// ════════════════════════════════════
+firebase.initializeApp(FB_CFG);
 const auth = firebase.auth();
 const db   = firebase.firestore();
 
-// ══════════════════════════════════════════════════════
+// ════════════════════════════════════
 //  STATE
-// ══════════════════════════════════════════════════════
-let CUR_USER   = null; // { uid, email, nombre, foto, rol, seccionesIds[] }
-let CE         = {};   // datos del centro educativo
-let DOCENTES   = [];
-let SECCIONES  = [];
-let ALUMNOS    = [];
-let REGISTROS  = [];
-let MY_SECS    = [];   // secciones que puede ver el docente actual
-let SIGES_TMP  = [];
+// ════════════════════════════════════
+let U=null, CE={}, DOCS=[], SECS=[], ALUMS=[], REGS=[];
+// MY_SECS = secciones donde el docente imparte clases
+// MY_GUIA = sección guía del docente (para Instrumento 002)
+let MY_SECS=[], MY_GUIA=null;
 
-const meses = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-const today  = () => new Date().toISOString().split('T')[0];
-const fmt    = d => { if(!d) return ''; const [y,m,dd] = d.split('-'); return `${dd}/${m}/${y}`; };
+const today  = ()=>new Date().toISOString().split('T')[0];
+const fmt    = d=>{ if(!d) return ''; const[y,m,dd]=d.split('-'); return `${dd}/${m}/${y}`; };
+const MES    = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
-// ══════════════════════════════════════════════════════
-//  AUTH
-// ══════════════════════════════════════════════════════
-auth.onAuthStateChanged(async user => {
-  hideSplash();
-  if(user) {
-    if(!user.email.endsWith(ALLOWED_DOMAIN)) {
-      toast('Correo no autorizado: solo ' + ALLOWED_DOMAIN,'error');
-      auth.signOut(); showLogin(); return;
+// ════════════════════════════════════
+//  AUTH — REDIRECT METHOD (fixes "action invalid")
+// ════════════════════════════════════
+document.getElementById('dom-badge').textContent = DOMAIN;
+document.getElementById('dom-note').textContent  = DOMAIN;
+
+// Handle redirect result on page load
+auth.getRedirectResult().then(async result => {
+  if (result && result.user) {
+    const user = result.user;
+    if (!user.email.endsWith(DOMAIN)) {
+      await auth.signOut();
+      showErr('Solo se permiten correos ' + DOMAIN);
+      hideSplash(); showLogin(); return;
     }
-    showLoading('Cargando datos...');
-    await loadUserProfile(user);
-    await loadAllData();
-    hideLoading();
-    showApp();
-  } else {
-    showLogin();
   }
+}).catch(err => {
+  hideSplash(); showLogin();
+  if (err.code !== 'auth/no-current-user') showErr(err.message);
 });
 
-async function loginGoogle() {
-  const provider = new firebase.auth.GoogleAuthProvider();
-
-  try {
-    await auth.signInWithPopup(provider);
-  } catch(e) {
-    toast('Error al iniciar sesión: ' + e.message,'error');
+auth.onAuthStateChanged(async user => {
+  hideSplash();
+  if (!user) { showLogin(); return; }
+  if (!user.email.endsWith(DOMAIN)) {
+    await auth.signOut(); showLogin();
+    showErr('Solo se permiten correos ' + DOMAIN); return;
   }
+  showLoad('Cargando datos...');
+  await loadProfile(user);
+  await loadAll();
+  hideLoad(); showApp();
+});
+
+function doLogin() {
+  const btn = document.getElementById('login-btn');
+  btn.disabled = true; btn.textContent = 'Redirigiendo...';
+  const p = new firebase.auth.GoogleAuthProvider();
+  p.setCustomParameters({ hd: DOMAIN.replace('@',''), prompt: 'select_account' });
+  auth.signInWithRedirect(p).catch(err => {
+    btn.disabled = false; btn.innerHTML = '↺ Intentar de nuevo';
+    showErr(err.message);
+  });
 }
 
-function logout() {
-  auth.signOut();
+function doLogout() { auth.signOut(); }
+
+function showErr(msg) {
+  const el = document.getElementById('l-err');
+  el.textContent = msg; el.style.display = 'block';
 }
 
-async function loadUserProfile(fbUser) {
+// ════════════════════════════════════
+//  PROFILE & DATA
+// ════════════════════════════════════
+async function loadProfile(fbUser) {
   const isAdmin = ADMIN_EMAILS.includes(fbUser.email);
-  // Try to find in docentes collection
-  let docSnap = await db.collection('docentes').where('email','==',fbUser.email).get();
-  let docData = null;
-  if(!docSnap.empty) docData = { id: docSnap.docs[0].id, ...docSnap.docs[0].data() };
+  let snap = await db.collection('docentes').where('email','==',fbUser.email).get();
+  let docData = snap.empty ? null : { id: snap.docs[0].id, ...snap.docs[0].data() };
 
-  CUR_USER = {
-    uid:    fbUser.uid,
-    email:  fbUser.email,
-    nombre: docData?.nombre || fbUser.displayName || fbUser.email.split('@')[0],
-    foto:   fbUser.photoURL,
-    rol:    isAdmin ? 'admin' : 'docente',
-    docenteId: docData?.id || null,
-    seccionesIds: docData?.seccionesIds || []
-  };
-
-  // Auto-register docente if first time
-  if(!docData) {
-    const newDoc = {
+  if (!docData) {
+    const ref = await db.collection('docentes').add({
       nombre: fbUser.displayName || fbUser.email.split('@')[0],
-      email:  fbUser.email,
-      especialidad: '',
-      seccionesIds: [],
-      creadoEn: new Date().toISOString()
-    };
-    const ref = await db.collection('docentes').add(newDoc);
-    CUR_USER.docenteId = ref.id;
+      email: fbUser.email, especialidad:'', secGuiaId:'', secsImparte:[], creadoEn: new Date().toISOString()
+    });
+    docData = { id: ref.id, nombre: fbUser.displayName || fbUser.email.split('@')[0], email: fbUser.email, secGuiaId:'', secsImparte:[] };
   }
+
+  U = {
+    uid: fbUser.uid, email: fbUser.email,
+    nombre: docData.nombre || fbUser.displayName || fbUser.email.split('@')[0],
+    foto: fbUser.photoURL,
+    rol: isAdmin ? 'admin' : 'docente',
+    docenteId: docData.id,
+    secGuiaId: docData.secGuiaId || '',
+    secsImparte: docData.secsImparte || []
+  };
 }
 
-// ══════════════════════════════════════════════════════
-//  DATA LOADING
-// ══════════════════════════════════════════════════════
-async function loadAllData() {
-  const [ceSnap, docsSnap, secsSnap, alumsSnap, regsSnap] = await Promise.all([
+async function loadAll() {
+  const [ceS, docsS, secsS, alumsS, regsS] = await Promise.all([
     db.collection('config').doc('centro').get(),
     db.collection('docentes').get(),
     db.collection('secciones').get(),
     db.collection('alumnos').get(),
-    db.collection('registros').orderBy('fecha','desc').limit(500).get()
+    db.collection('registros').orderBy('fecha','desc').limit(1000).get()
   ]);
+  CE    = ceS.exists ? ceS.data() : {};
+  DOCS  = docsS.docs.map(d=>({id:d.id,...d.data()}));
+  SECS  = secsS.docs.map(d=>({id:d.id,...d.data()}));
+  ALUMS = alumsS.docs.map(d=>({id:d.id,...d.data()}));
+  REGS  = regsS.docs.map(d=>({id:d.id,...d.data()}));
 
-  CE        = ceSnap.exists ? ceSnap.data() : {};
-  DOCENTES  = docsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-  SECCIONES = secsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-  ALUMNOS   = alumsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-  REGISTROS = regsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+  // Re-sync user doc
+  const myDoc = DOCS.find(d=>d.id===U.docenteId);
+  if (myDoc) {
+    U.nombre     = myDoc.nombre || U.nombre;
+    U.secGuiaId  = myDoc.secGuiaId || '';
+    U.secsImparte= myDoc.secsImparte || [];
+  }
 
-  // Re-sync user seccionesIds from docentes
-  const myDoc = DOCENTES.find(d => d.id === CUR_USER.docenteId);
-  if(myDoc) { CUR_USER.seccionesIds = myDoc.seccionesIds || []; CUR_USER.nombre = myDoc.nombre || CUR_USER.nombre; }
-
-  // MY_SECS: admin sees all, docente sees only assigned
-  MY_SECS = CUR_USER.rol === 'admin'
-    ? SECCIONES
-    : SECCIONES.filter(s => CUR_USER.seccionesIds.includes(s.id));
+  if (U.rol === 'admin') {
+    MY_SECS = SECS;
+    MY_GUIA = null;
+  } else {
+    MY_SECS = SECS.filter(s => U.secsImparte.includes(s.id));
+    MY_GUIA = SECS.find(s => s.id === U.secGuiaId) || null;
+  }
 }
 
-// ══════════════════════════════════════════════════════
+// ════════════════════════════════════
 //  UI CONTROL
-// ══════════════════════════════════════════════════════
-function hideSplash()   { document.getElementById('splash').style.display='none'; }
-function showLogin()    { document.getElementById('login').style.display='flex'; document.getElementById('app').style.display='none'; }
-function showApp()      { document.getElementById('login').style.display='none'; document.getElementById('app').style.display='flex'; buildNav(); renderRoleBanner(); renderSBUser(); navTo('dashboard'); }
-function showLoading(m) { document.getElementById('loading-overlay').classList.add('on'); document.getElementById('loading-msg').textContent=m||'Cargando...'; }
-function hideLoading()  { document.getElementById('loading-overlay').classList.remove('on'); }
+// ════════════════════════════════════
+const hideSplash = () => document.getElementById('splash').style.display = 'none';
+const showLogin  = () => { document.getElementById('login').style.display = 'flex'; document.getElementById('app').style.display = 'none'; };
+const showLoad   = m  => { document.getElementById('lov').classList.add('on'); document.getElementById('lov-msg').textContent = m; };
+const hideLoad   = () => document.getElementById('lov').classList.remove('on');
+const om         = id => { document.getElementById(id).classList.add('on'); fillModalSels(id); };
+const cm         = id => document.getElementById(id).classList.remove('on');
+document.querySelectorAll('.mo').forEach(m => m.addEventListener('click', e => { if(e.target===m) m.classList.remove('on'); }));
 
-function renderRoleBanner() {
-  const b = document.getElementById('role-banner');
-  const rolClass = CUR_USER.rol==='admin'?'admin':'';
-  b.innerHTML = `<span class="role-pill ${rolClass}">${CUR_USER.rol==='admin'?'👑 ADMINISTRADOR':'👩‍🏫 DOCENTE'}</span>
-    Sesión: <strong>${CUR_USER.nombre}</strong> &nbsp;·&nbsp; ${CUR_USER.email}
-    ${CUR_USER.rol==='docente'?`&nbsp;·&nbsp; Secciones asignadas: <strong>${MY_SECS.map(s=>s.nombre).join(', ')||'Ninguna'}</strong>`:''}`;
+function toast(msg, type='info') {
+  const t = document.createElement('div');
+  t.className = `tt tt${type[0]}`;
+  t.innerHTML = `<span>${type==='success'?'✅':type==='error'?'❌':'ℹ️'}</span><span>${msg}</span>`;
+  document.getElementById('toasts').appendChild(t);
+  setTimeout(()=>t.remove(), 3600);
 }
 
-function renderSBUser() {
-  document.getElementById('ce-nombre-sb').textContent = CE.nombre||'Centro Escolar';
-  document.getElementById('sb-usr').innerHTML = `
-    <div class="usr-av">${CUR_USER.foto?`<img src="${CUR_USER.foto}">`:(CUR_USER.nombre||'U').charAt(0)}</div>
-    <div><div class="usr-nm">${CUR_USER.nombre}</div><div class="usr-em">${CUR_USER.email}</div></div>`;
+function showApp() {
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('app').style.display   = 'block';
+  buildUI();
+  goTo('dashboard');
 }
 
-function buildNav() {
-  const isAdmin = CUR_USER.rol === 'admin';
-  const nav = document.getElementById('main-nav');
-  const tb  = document.getElementById('topbar-actions');
-
-  const items = [
-    { sec:'Principal', links:[
-      { id:'dashboard', ico:'📊', label:'Dashboard' },
-      { id:'alumnos',   ico:'👨‍🎓', label:'Alumnos', badge:'nb-alum' },
-      isAdmin ? { id:'siges', ico:'📄', label:'Importar SIGES' } : null,
+function buildUI() {
+  const isAdmin = U.rol === 'admin';
+  // Role bar
+  document.getElementById('role-bar').innerHTML =
+    `<span class="rpill ${U.rol}">${U.rol==='admin'?'👑 ADMIN':'👩‍🏫 DOCENTE'}</span>
+     ${U.nombre} &nbsp;·&nbsp; ${U.email}
+     ${!isAdmin && MY_SECS.length ? `&nbsp;·&nbsp; Mis secciones: <b>${MY_SECS.map(s=>s.nombre).join(', ')}</b>` : ''}
+     ${!isAdmin && MY_GUIA ? `&nbsp;·&nbsp; Guía: <b>${MY_GUIA.nombre}</b>` : ''}`;
+  // SB
+  const ce = document.getElementById('sb-ce');
+  ce.innerHTML = `CortesíaApp <small>${CE.nombre||'Centro Escolar'}</small>`;
+  document.getElementById('sb-user').innerHTML =
+    `<div class="sb-av">${U.foto?`<img src="${U.foto}">`:(U.nombre||'U').charAt(0)}</div>
+     <div><div class="sb-un">${U.nombre}</div><div class="sb-ue">${U.email}</div></div>`;
+  // Topbar actions
+  document.getElementById('tb-r').innerHTML =
+    `<button class="btn bg2 bsm" onclick="om('mo-alum')">+ Alumno</button>
+     <button class="btn bp bsm" onclick="quickDem()">⚡ Demérito rápido</button>`;
+  // Nav
+  const groups = [
+    { t:'Principal', links:[
+      {id:'dashboard', ic:'📊', lb:'Dashboard'},
+      {id:'alumnos',   ic:'👨‍🎓', lb:'Alumnos', badge:'nb-alum'},
+      isAdmin?{id:'siges', ic:'📄', lb:'Importar SIGES'}:null,
     ]},
-    { sec:'Deméritos', links:[
-      { id:'registrar', ico:'➕', label:'Registrar' },
-      { id:'historial', ico:'📋', label:'Historial' },
-      { id:'redencion', ico:'🔄', label:'Redención' },
+    { t:'Deméritos', links:[
+      {id:'registrar', ic:'➕', lb:'Registrar Demérito'},
+      {id:'historial', ic:'📋', lb:'Historial'},
+      {id:'redencion', ic:'🔄', lb:'Redención'},
+      {id:'correctivos',ic:'⚠️', lb:'Casos Correctivos'},
     ]},
-    { sec:'Informes', links:[
-      { id:'inf001',    ico:'📝', label:'Informe Estudiante (001)' },
-      { id:'inf002',    ico:'📊', label:'Consolidado Sección (002)' },
-      { id:'honores',   ico:'🌟', label:'Menciones de Honor' },
+    { t:'Informes & Formatos', links:[
+      {id:'bitacora',  ic:'📓', lb:'Bitácora de Escritos'},
+      {id:'inf001',    ic:'📝', lb:'Instrumento 001'},
+      {id:'inf002',    ic:'📊', lb:'Instrumento 002'},
+      {id:'honores',   ic:'🌟', lb:'Menciones de Honor'},
     ]},
-    isAdmin ? { sec:'Configuración', links:[
-      { id:'docentes',  ico:'👩‍🏫', label:'Docentes Guías' },
-      { id:'secciones', ico:'🏫', label:'Secciones' },
-      { id:'config',    ico:'⚙️',  label:'Centro Escolar' },
-    ]} : null,
+    isAdmin?{ t:'Configuración', links:[
+      {id:'docentes',  ic:'👩‍🏫', lb:'Docentes Guías'},
+      {id:'secciones', ic:'🏫', lb:'Secciones'},
+      {id:'config',    ic:'⚙️',  lb:'Centro Escolar'},
+    ]}:null,
   ].filter(Boolean);
 
-  nav.innerHTML = items.map(g=>`
-    <div class="ns">${g.sec}</div>
+  document.getElementById('nav').innerHTML = groups.map(g=>`
+    <div class="nsec">${g.t}</div>
     ${g.links.filter(Boolean).map(l=>`
-      <div class="ni" id="nav-${l.id}" onclick="navTo('${l.id}')">
-        <span class="ic">${l.ico}</span>${l.label}
-        ${l.badge?`<span class="nb" id="${l.badge}">0</span>`:''}
-      </div>`).join('')}
-  `).join('');
-
-  tb.innerHTML = `
-    <button class="btn bg2 bsm" onclick="openModal('mo-alumno')">+ Alumno</button>
-    <button class="btn bp bsm" onclick="quickDemerito()">⚡ Demérito</button>`;
+      <div class="ni" id="n-${l.id}" onclick="goTo('${l.id}')">
+        <span class="ic">${l.ic}</span>${l.lb}
+        ${l.badge?`<span class="nbadge" id="${l.badge}">0</span>`:''}
+      </div>`).join('')}`).join('');
 }
 
-const PAGE_TITLES = {
+const TITLES = {
   dashboard:'Dashboard <span>General</span>', alumnos:'Alumnos <span>Matriculados</span>',
   siges:'Importar <span>SIGES</span>', registrar:'Registrar <span>Demérito</span>',
   historial:'Historial <span>de Registros</span>', redencion:'Redención <span>de Deméritos</span>',
-  inf001:'Informe <span>por Estudiante — Instrumento 001</span>', inf002:'Consolidado <span>por Sección — Instrumento 002</span>',
+  correctivos:'Casos <span>Correctivos</span>', bitacora:'Bitácora <span>de Escritos Docentes</span>',
+  inf001:'Instrumento <span>No. 001 — Tarjeta Individual</span>',
+  inf002:'Instrumento <span>No. 002 — Consolidado Sección</span>',
   honores:'Menciones <span>de Honor</span>', docentes:'Docentes <span>Guías</span>',
   secciones:'Secciones <span>y Grados</span>', config:'Centro <span>Escolar</span>'
 };
 
-function navTo(id) {
+function goTo(id) {
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
-  const navEl = document.getElementById('nav-'+id);
-  if(navEl) navEl.classList.add('on');
-  document.getElementById('page-title').innerHTML = PAGE_TITLES[id]||id;
-
-  // Check access for non-admin
-  if(CUR_USER.rol!=='admin' && ['siges','docentes','secciones','config'].includes(id)) {
-    document.getElementById('main-content').innerHTML = `<div class="denied"><div class="ico">🔒</div><p>Acceso restringido a administradores.</p></div>`;
+  const el = document.getElementById('n-'+id); if(el) el.classList.add('on');
+  document.getElementById('pg-title').innerHTML = TITLES[id]||id;
+  const c = document.getElementById('content');
+  c.innerHTML = '';
+  // Admin-only pages
+  if (!['admin'].includes(U.rol) && ['siges','docentes','secciones','config'].includes(id)) {
+    c.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--mu)"><div style="font-size:44px">🔒</div><p style="margin-top:10px">Solo acceso para administradores</p></div>`;
     return;
   }
-  renderView(id);
+  const views = {
+    dashboard, alumnos, siges, registrar, historial, redencion,
+    correctivos, bitacora, inf001, inf002, honores, docentes, secciones, config
+  };
+  if(views[id]) views[id](c);
 }
 
-function renderView(id) {
-  const c = document.getElementById('main-content');
-  c.innerHTML = '';
-  if(id==='dashboard')  renderDashboard(c);
-  else if(id==='alumnos')   renderAlumnos(c);
-  else if(id==='siges')     renderSiges(c);
-  else if(id==='registrar') renderRegistrar(c);
-  else if(id==='historial') renderHistorial(c);
-  else if(id==='redencion') renderRedencion(c);
-  else if(id==='inf001')    renderInf001(c);
-  else if(id==='inf002')    renderInf002(c);
-  else if(id==='honores')   renderHonores(c);
-  else if(id==='docentes')  renderDocentes(c);
-  else if(id==='secciones') renderSecciones(c);
-  else if(id==='config')    renderConfig(c);
-}
-
-// ══════════════════════════════════════════════════════
+// ════════════════════════════════════
 //  HELPERS
-// ══════════════════════════════════════════════════════
-function demColor(n){ return n===0?'var(--su)':n<3?'var(--ac)':n<6?'var(--wa)':n<10?'#ea580c':'var(--da)'; }
-function demBadge(n){
-  if(n===0) return '<span class="bx bxg">✨</span>';
+// ════════════════════════════════════
+const dC = n => n===0?'var(--su)':n<3?'var(--ac)':n<6?'var(--wa)':n<10?'#ea580c':'var(--da)';
+const dB = n => {
+  if(n===0) return '<span class="bx bxg">✨ 0</span>';
   if(n<3)   return `<span class="bx bxb">${n}</span>`;
   if(n<6)   return `<span class="bx bxy">⚠️ ${n}</span>`;
   if(n<10)  return `<span class="bx bxo">🔶 ${n}</span>`;
   if(n<15)  return `<span class="bx bxr">🚨 ${n}</span>`;
   return `<span class="bx bxp">🔴 ${n} NP</span>`;
-}
-function avHtml(name, sz=28){
-  const cls=['#2563eb','#7c3aed','#db2777','#059669','#d97706','#0891b2','#dc2626'];
-  let h=0; for(let c of (name||'')) h=(h*31+c.charCodeAt(0))%cls.length;
+};
+function av(name, sz=28) {
+  const cls=['#1d6bf0','#7c3aed','#db2777','#0d9870','#c77b0a','#0ea5c9','#d93030'];
+  let h=0; for(const c of (name||'')) h=(h*31+c.charCodeAt(0))%cls.length;
   const ini=(name||'?').split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
-  return `<div class="av" style="width:${sz}px;height:${sz}px;background:${cls[h]};font-size:${sz/2.5}px;font-weight:700;color:#fff">${ini}</div>`;
+  return `<div class="av" style="width:${sz}px;height:${sz}px;background:${cls[h]};font-size:${Math.round(sz/2.6)}px">${ini}</div>`;
 }
-function consecuencia(n){
-  const map=[
-    [15,'🔴 15 deméritos: NO PODRÁ SER PROMOVIDO DE GRADO (Art. 5)','rgba(124,58,237,.1)','#7c3aed'],
-    [10,'🚨 10+ deméritos: Suspensión de privilegios + Reunión con dirección','rgba(220,38,38,.1)','var(--da)'],
-    [6, '🔶 6+ deméritos: Comunicar a familia + Tarea correctiva','rgba(234,88,12,.1)','#ea580c'],
-    [3, '⚠️ 3+ deméritos: Advertencia verbal + Reflexión escrita','rgba(217,119,6,.1)','var(--wa)'],
-  ];
-  for(const [th,msg,bg,c] of map) if(n>=th) return `<div style="padding:8px 12px;border-radius:7px;background:${bg};border-left:3px solid ${c};color:${c};font-size:10px;margin-top:8px">${msg}</div>`;
+function cons(n) {
+  if(n>=15) return `<div class="al al-c">🔴 <b>15 deméritos:</b> NO PODRÁ SER PROMOVIDO DE GRADO (Art. 5)</div>`;
+  if(n>=10) return `<div class="al al-r">🚨 <b>10+ deméritos:</b> Suspensión de privilegios + Reunión con dirección y familia</div>`;
+  if(n>=6)  return `<div class="al al-o">🔶 <b>6+ deméritos:</b> Comunicar a familia + Tarea correctiva</div>`;
+  if(n>=3)  return `<div class="al al-w">⚠️ <b>3+ deméritos:</b> Advertencia verbal + Reflexión escrita</div>`;
   return '';
 }
-function toast(msg,type='info'){
-  const t=document.createElement('div');
-  t.className=`tt tt${type[0]}`;
-  t.innerHTML=`<span>${type==='success'?'✅':type==='error'?'❌':'ℹ️'}</span><span>${msg}</span>`;
-  document.getElementById('toasts').appendChild(t);
-  setTimeout(()=>t.remove(),3500);
-}
-function secOpts(all=false, placeholder='Todas las secciones'){
-  const list = all ? SECCIONES : MY_SECS;
-  return `<option value="">${placeholder}</option>`+list.map(s=>`<option value="${s.id}">${s.nombre} — ${s.grado}</option>`).join('');
-}
-function alumOpts(secId='', placeholder='Seleccionar alumno...'){
-  const list = ALUMNOS.filter(a=> !secId||a.seccionId===secId).filter(a=> CUR_USER.rol==='admin'||MY_SECS.some(s=>s.id===a.seccionId)).sort((a,b)=>a.lista-b.lista);
-  return `<option value="">${placeholder}</option>`+list.map(a=>`<option value="${a.id}">${a.lista}. ${a.nombre} (${a.demeritos} dem.)</option>`).join('');
-}
-function alumsInMyScope(){ return CUR_USER.rol==='admin'?ALUMNOS:ALUMNOS.filter(a=>MY_SECS.some(s=>s.id===a.seccionId)); }
-function regsInMyScope(){ const ids=new Set(alumsInMyScope().map(a=>a.id)); return REGISTROS.filter(r=>ids.has(r.alumnoId)); }
+const myAlums = () => U.rol==='admin' ? ALUMS : ALUMS.filter(a=>MY_SECS.some(s=>s.id===a.seccionId));
+const myRegs  = () => { const ids=new Set(myAlums().map(a=>a.id)); return REGS.filter(r=>ids.has(r.alumnoId)); };
 
-function openModal(id){ document.getElementById(id).classList.add('on'); populateModalSelects(id); }
-function closeModal(id){ document.getElementById(id).classList.remove('on'); }
-document.querySelectorAll('.mo').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) m.classList.remove('on'); }));
+function secOpts(all=false, ph='Todas las secciones') {
+  const list = all||U.rol==='admin' ? SECS : MY_SECS;
+  return `<option value="">${ph}</option>`+list.map(s=>`<option value="${s.id}">${s.nombre} — ${s.grado}</option>`).join('');
+}
+function alumOpts(secId='', ph='Seleccionar alumno...') {
+  const base = U.rol==='admin' ? ALUMS : myAlums();
+  const list = base.filter(a=>!secId||a.seccionId===secId).sort((a,b)=>a.lista-b.lista);
+  return `<option value="">${ph}</option>`+list.map(a=>`<option value="${a.id}">${a.lista}. ${a.nombre} (${a.demeritos||0} dem.)</option>`).join('');
+}
 
-function populateModalSelects(id){
-  if(id==='mo-alumno'){
-    const el=document.getElementById('ma-sec'); if(el) el.innerHTML=secOpts(false,'Seleccionar...');
+function fillModalSels(id) {
+  if(id==='mo-alum') { const el=document.getElementById('ma-sec'); if(el) el.innerHTML=secOpts(true,'Seleccionar...'); }
+  if(id==='mo-sec')  {
+    const el=document.getElementById('ms-d'); if(!el) return;
+    el.innerHTML='<option value="">Sin asignar</option>'+DOCS.map(d=>`<option value="${d.id}">${d.nombre}</option>`).join('');
   }
-  if(id==='mo-docente'){
-    const el=document.getElementById('mdoc-secs'); if(el){ el.innerHTML=''; SECCIONES.forEach(s=>{const o=document.createElement('option');o.value=s.id;o.textContent=s.nombre+' — '+s.grado;el.appendChild(o);}); }
-  }
-  if(id==='mo-seccion'){
-    const el=document.getElementById('msec-doc'); if(el){ el.innerHTML='<option value="">Sin asignar</option>'; DOCENTES.forEach(d=>{const o=document.createElement('option');o.value=d.id;o.textContent=d.nombre;el.appendChild(o);}); }
+  if(id==='mo-doc')  {
+    const sg=document.getElementById('md-sg');
+    const ss=document.getElementById('md-ss');
+    if(sg) sg.innerHTML='<option value="">Sin sección guía</option>'+SECS.map(s=>`<option value="${s.id}">${s.nombre}</option>`).join('');
+    if(ss) { ss.innerHTML=''; SECS.forEach(s=>{const o=document.createElement('option');o.value=s.id;o.textContent=s.nombre+' — '+s.grado;ss.appendChild(o);}); }
   }
 }
 
-// ══════════════════════════════════════════════════════
+// ════════════════════════════════════
 //  DASHBOARD
-// ══════════════════════════════════════════════════════
-function renderDashboard(c){
-  const myAlums = alumsInMyScope();
-  const myRegs  = regsInMyScope();
-  const dem     = myRegs.filter(r=>r.tipo==='demerito').length;
-  const red     = myRegs.filter(r=>r.tipo==='redencion').length;
-  const rec     = myRegs.filter(r=>r.tipo==='reconocimiento').length;
-  const sin0    = myAlums.filter(a=>a.demeritos===0).length;
-  const riesgo  = myAlums.filter(a=>a.demeritos>=10).length;
-
-  const nb = document.getElementById('nb-alum'); if(nb) nb.textContent=myAlums.length;
-
-  c.innerHTML = `
+// ════════════════════════════════════
+function dashboard(c) {
+  const ma=myAlums(), mr=myRegs();
+  const nb=document.getElementById('nb-alum'); if(nb) nb.textContent=ma.length;
+  const dem=mr.filter(r=>r.tipo==='demerito').length;
+  const red=mr.filter(r=>r.tipo==='redencion').length;
+  const sin0=ma.filter(a=>!a.demeritos).length;
+  const risk=ma.filter(a=>(a.demeritos||0)>=10).length;
+  c.innerHTML=`
   <div class="sg">
-    <div class="sc scb"><div class="sc-em">👨‍🎓</div><div class="sc-v">${myAlums.length}</div><div class="sc-l">Alumnos en mis secciones</div></div>
-    <div class="sc scr"><div class="sc-em">❌</div><div class="sc-v">${dem}</div><div class="sc-l">Deméritos registrados</div></div>
-    <div class="sc scg"><div class="sc-em">✨</div><div class="sc-v">${sin0}</div><div class="sc-l">Sin deméritos</div></div>
-    <div class="sc sco"><div class="sc-em">🚨</div><div class="sc-v">${riesgo}</div><div class="sc-l">En riesgo (10+)</div></div>
-    <div class="sc scp"><div class="sc-em">🔄</div><div class="sc-v">${red}</div><div class="sc-l">Redenciones</div></div>
+    <div class="sc scb"><div class="sc-e">👨‍🎓</div><div class="sc-v">${ma.length}</div><div class="sc-l">Alumnos en mis secciones</div></div>
+    <div class="sc scr"><div class="sc-e">❌</div><div class="sc-v">${dem}</div><div class="sc-l">Deméritos registrados</div></div>
+    <div class="sc scg"><div class="sc-e">✨</div><div class="sc-v">${sin0}</div><div class="sc-l">Sin deméritos</div></div>
+    <div class="sc sco"><div class="sc-e">🚨</div><div class="sc-v">${risk}</div><div class="sc-l">En riesgo (10+)</div></div>
+    <div class="sc scp"><div class="sc-e">🔄</div><div class="sc-v">${red}</div><div class="sc-l">Redenciones</div></div>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
     <div class="card">
-      <div class="ch"><span class="ct">⚠️ Alumnos en Riesgo (3+ dem.)</span></div>
+      <div class="ch"><span class="ct">⚠️ Alumnos en Riesgo (3+)</span><span class="bx bxr" id="risk-n">${ma.filter(a=>(a.demeritos||0)>=3).length}</span></div>
       <div class="tw"><table><thead><tr><th>Alumno</th><th>Sección</th><th>Dem.</th><th>Estado</th></tr></thead><tbody>
-        ${myAlums.filter(a=>a.demeritos>=3).sort((a,b)=>b.demeritos-a.demeritos).slice(0,8).map(a=>{
-          const s=SECCIONES.find(s=>s.id===a.seccionId);
-          return `<tr><td><div style="display:flex;align-items:center;gap:6px">${avHtml(a.nombre)}<span>${a.nombre}</span></div></td>
+        ${ma.filter(a=>(a.demeritos||0)>=3).sort((a,b)=>b.demeritos-a.demeritos).slice(0,8).map(a=>{
+          const s=SECS.find(s=>s.id===a.seccionId);
+          return `<tr><td><div style="display:flex;align-items:center;gap:6px">${av(a.nombre)}<span>${a.nombre}</span></div></td>
           <td><span class="sp">${s?.nombre||'—'}</span></td>
-          <td><div class="db"><div class="db-b"><div class="db-f" style="width:${Math.min(a.demeritos/15*100,100)}%;background:${demColor(a.demeritos)}"></div></div><span class="db-n" style="color:${demColor(a.demeritos)}">${a.demeritos}</span></div></td>
-          <td>${demBadge(a.demeritos)}</td></tr>`;
-        }).join('') || '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--mu)">🎉 Sin alumnos en riesgo</td></tr>'}
+          <td><div class="db"><div class="db-b"><div class="db-f" style="width:${Math.min((a.demeritos||0)/15*100,100)}%;background:${dC(a.demeritos||0)}"></div></div><span class="db-n" style="color:${dC(a.demeritos||0)}">${a.demeritos||0}</span></div></td>
+          <td>${dB(a.demeritos||0)}</td></tr>`;
+        }).join('')||'<tr><td colspan="4" style="text-align:center;padding:18px;color:var(--mu)">🎉 Sin riesgo</td></tr>'}
       </tbody></table></div>
     </div>
     <div class="card">
       <div class="ch"><span class="ct">📅 Últimos Registros</span></div>
-      <div class="tw"><table><thead><tr><th>Alumno</th><th>Causal</th><th>Fecha</th><th>Tipo</th></tr></thead><tbody>
-        ${myRegs.slice(0,8).map(r=>{
-          const a=ALUMNOS.find(al=>al.id===r.alumnoId);
-          const t=r.tipo==='demerito'?'<span class="bx bxr">Dem</span>':r.tipo==='redencion'?'<span class="bx bxg">Red</span>':'<span class="bx bxgold">Rec</span>';
+      <div class="tw"><table><thead><tr><th>Alumno</th><th>Causal</th><th>Fecha</th><th></th></tr></thead><tbody>
+        ${mr.slice(0,8).map(r=>{
+          const a=ALUMS.find(al=>al.id===r.alumnoId);
+          const t=r.tipo==='demerito'?'<span class="bx bxr">D</span>':r.tipo==='redencion'?'<span class="bx bxg">R</span>':'<span class="bx bxgo">Rec</span>';
           return `<tr><td style="font-size:10px">${a?.nombre||'?'}</td><td><span class="bx bxb">${r.causalLetra||'?'}</span></td><td style="font-family:var(--mo);font-size:10px;color:var(--mu)">${fmt(r.fecha)}</td><td>${t}</td></tr>`;
-        }).join('')||'<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--mu)">Sin registros</td></tr>'}
+        }).join('')||'<tr><td colspan="4" style="text-align:center;padding:18px;color:var(--mu)">Sin registros</td></tr>'}
       </tbody></table></div>
     </div>
   </div>
-  <div class="card" style="margin-top:16px">
-    <div class="ch"><span class="ct">🏫 Resumen por Secciones</span></div>
-    <div class="tw"><table><thead><tr><th>Sección</th><th>Grado</th><th>Docente Guía</th><th>M/H/Total</th><th>Deméritos</th><th>Redenciones</th><th>Reconoc.</th><th>Sin dem.</th></tr></thead><tbody>
+  <div class="card" style="margin-top:14px">
+    <div class="ch"><span class="ct">🏫 Mis Secciones</span></div>
+    <div class="tw"><table><thead><tr><th>Sección</th><th>Grado</th><th>Docente Guía</th><th>M/H/Total</th><th>Deméritos</th><th>Redenciones</th><th>Sin dem.</th></tr></thead><tbody>
       ${MY_SECS.map(sec=>{
-        const als=ALUMNOS.filter(a=>a.seccionId===sec.id);
-        const rs=REGISTROS.filter(r=>als.some(a=>a.id===r.alumnoId));
-        const doc=DOCENTES.find(d=>d.id===sec.docenteId);
+        const als=ALUMS.filter(a=>a.seccionId===sec.id);
+        const rs=REGS.filter(r=>als.some(a=>a.id===r.alumnoId));
+        const doc=DOCS.find(d=>d.id===sec.docenteId);
         const m=als.filter(a=>a.sexo==='M').length, h=als.filter(a=>a.sexo==='H').length;
         return `<tr><td><span class="sp">${sec.nombre}</span></td><td style="font-size:10px;color:var(--mu)">${sec.grado}</td>
         <td style="font-size:10px">${doc?.nombre||'—'}</td>
         <td style="font-family:var(--mo)">${m}/${h}/${als.length}</td>
         <td style="font-family:var(--mo);color:${rs.filter(r=>r.tipo==='demerito').length>10?'var(--da)':'var(--su)'}">${rs.filter(r=>r.tipo==='demerito').length}</td>
         <td style="font-family:var(--mo);color:var(--su)">${rs.filter(r=>r.tipo==='redencion').length}</td>
-        <td style="font-family:var(--mo);color:#fbbf24">${rs.filter(r=>r.tipo==='reconocimiento').length}</td>
-        <td style="font-family:var(--mo)">${als.filter(a=>a.demeritos===0).length}</td></tr>`;
-      }).join('')}
+        <td style="font-family:var(--mo)">${als.filter(a=>!a.demeritos).length}</td></tr>`;
+      }).join('')||'<tr><td colspan="7" style="text-align:center;padding:18px;color:var(--mu)">Sin secciones asignadas</td></tr>'}
     </tbody></table></div>
   </div>`;
 }
 
-// ══════════════════════════════════════════════════════
+// ════════════════════════════════════
 //  ALUMNOS
-// ══════════════════════════════════════════════════════
-let alumQ='', alumSec='', alumSex='', alumEst='';
-function renderAlumnos(c){
-  const nb = document.getElementById('nb-alum'); if(nb) nb.textContent=alumsInMyScope().length;
-  c.innerHTML = `
+// ════════════════════════════════════
+let aq='',asec='',asx='',aest='';
+function alumnos(c) {
+  const nb=document.getElementById('nb-alum'); if(nb) nb.textContent=myAlums().length;
+  c.innerHTML=`
   <div class="sb-s">
-    <input class="si" id="q-alum" placeholder="Buscar por nombre o NIE..." value="${alumQ}" oninput="alumQ=this.value;filterAlumnos()">
-    <select class="fc" style="width:155px" id="f-sec-alum" onchange="alumSec=this.value;filterAlumnos()">${secOpts()}</select>
-    <select class="fc" style="width:130px" id="f-sex-alum" onchange="alumSex=this.value;filterAlumnos()"><option value="">Ambos sexos</option><option value="M">Masculino</option><option value="H">Femenino</option></select>
-    <select class="fc" style="width:140px" id="f-est-alum" onchange="alumEst=this.value;filterAlumnos()">
-      <option value="">Todos</option><option value="ok">Sin riesgo</option><option value="w3">3+ dem.</option><option value="w6">6+ dem.</option><option value="w10">10+ dem.</option><option value="w15">15 dem.</option>
+    <input class="si" id="q-a" placeholder="Buscar nombre o NIE..." value="${aq}" oninput="aq=this.value;filtA()">
+    <select class="fc" style="width:150px" id="f-sa" onchange="asec=this.value;filtA()">${secOpts()}</select>
+    <select class="fc" style="width:120px" id="f-sx" onchange="asx=this.value;filtA()"><option value="">Ambos</option><option value="M">Masculino</option><option value="H">Femenino</option></select>
+    <select class="fc" style="width:140px" id="f-ae" onchange="aest=this.value;filtA()">
+      <option value="">Todos</option><option value="ok">Sin riesgo</option><option value="w3">3+ dem.</option><option value="w6">6+ dem.</option><option value="w10">10+ dem.</option>
     </select>
   </div>
   <div class="card">
-    <div class="ch"><span class="ct">👨‍🎓 Alumnos</span><div style="display:flex;gap:6px"><span class="bx bxb" id="alum-count">0</span>${CUR_USER.rol==='admin'?'<button class="btn bp bsm" onclick="openModal(\'mo-alumno\')">+ Agregar</button>':''}</div></div>
-    <div class="tw"><table><thead><tr><th>N°</th><th>Nombre</th><th>NIE</th><th>Sexo</th><th>Sección</th><th>Deméritos</th><th>Estado</th><th></th></tr></thead><tbody id="alum-tbody"></tbody></table></div>
+    <div class="ch"><span class="ct">👨‍🎓 Alumnos</span><div style="display:flex;gap:6px"><span class="bx bxb" id="a-cnt">0</span>${U.rol==='admin'?'<button class="btn bp bsm" onclick="om(\'mo-alum\')">+ Agregar</button>':''}</div></div>
+    <div class="tw"><table><thead><tr><th>N°</th><th>Nombre</th><th>NIE</th><th>Sexo</th><th>Sección</th><th>Deméritos</th><th>Estado</th><th></th></tr></thead><tbody id="a-tb"></tbody></table></div>
   </div>`;
-  document.getElementById('f-sec-alum').value=alumSec;
-  document.getElementById('f-sex-alum').value=alumSex;
-  document.getElementById('f-est-alum').value=alumEst;
-  filterAlumnos();
+  document.getElementById('f-sa').value=asec; document.getElementById('f-sx').value=asx; document.getElementById('f-ae').value=aest;
+  filtA();
 }
-
-function filterAlumnos(){
-  let list = alumsInMyScope().filter(a=>{
-    if(alumQ && !a.nombre.toLowerCase().includes(alumQ.toLowerCase()) && !(a.nie||'').includes(alumQ)) return false;
-    if(alumSec && a.seccionId!==alumSec) return false;
-    if(alumSex && a.sexo!==alumSex) return false;
-    if(alumEst==='ok' && a.demeritos>=3) return false;
-    if(alumEst==='w3' && (a.demeritos<3||a.demeritos>=6)) return false;
-    if(alumEst==='w6' && (a.demeritos<6||a.demeritos>=10)) return false;
-    if(alumEst==='w10' && (a.demeritos<10||a.demeritos>=15)) return false;
-    if(alumEst==='w15' && a.demeritos<15) return false;
+function filtA() {
+  let list=myAlums().filter(a=>{
+    if(aq && !a.nombre.toLowerCase().includes(aq.toLowerCase()) && !(a.nie||'').includes(aq)) return false;
+    if(asec && a.seccionId!==asec) return false;
+    if(asx && a.sexo!==asx) return false;
+    const d=a.demeritos||0;
+    if(aest==='ok'&&d>=3) return false;
+    if(aest==='w3'&&(d<3||d>=6)) return false;
+    if(aest==='w6'&&(d<6||d>=10)) return false;
+    if(aest==='w10'&&d<10) return false;
     return true;
-  }).sort((a,b)=>b.demeritos-a.demeritos);
-
-  const cnt = document.getElementById('alum-count'); if(cnt) cnt.textContent=list.length;
-  const tbody = document.getElementById('alum-tbody'); if(!tbody) return;
-  tbody.innerHTML = list.length ? list.map(a=>{
-    const s=SECCIONES.find(sc=>sc.id===a.seccionId);
+  }).sort((a,b)=>(b.demeritos||0)-(a.demeritos||0));
+  const cnt=document.getElementById('a-cnt'); if(cnt) cnt.textContent=list.length;
+  const tb=document.getElementById('a-tb'); if(!tb) return;
+  tb.innerHTML=list.length?list.map(a=>{
+    const s=SECS.find(sc=>sc.id===a.seccionId);
+    const d=a.demeritos||0;
     return `<tr>
       <td style="font-family:var(--mo);color:var(--mu)">${a.lista||'—'}</td>
-      <td><div style="display:flex;align-items:center;gap:7px">${avHtml(a.nombre)}<div><div style="font-weight:600">${a.nombre}</div><div style="font-size:9px;color:var(--mu)">${a.nie||'—'}</div></div></div></td>
+      <td><div style="display:flex;align-items:center;gap:7px">${av(a.nombre)}<div><div style="font-weight:600">${a.nombre}</div><div style="font-size:9px;color:var(--mu)">${a.nie||'—'}</div></div></div></td>
       <td style="font-family:var(--mo);font-size:10px">${a.nie||'—'}</td>
       <td><span class="bx ${a.sexo==='M'?'bxb':'bxp'}">${a.sexo==='M'?'♂ M':'♀ H'}</span></td>
       <td><span class="sp">${s?.nombre||'—'}</span></td>
-      <td><div class="db"><div class="db-b"><div class="db-f" style="width:${Math.min((a.demeritos||0)/15*100,100)}%;background:${demColor(a.demeritos||0)}"></div></div><span class="db-n" style="color:${demColor(a.demeritos||0)}">${a.demeritos||0}</span></div></td>
-      <td>${demBadge(a.demeritos||0)}</td>
-      <td><button class="btn bg2 bsm" onclick="irRegistrar('${a.id}')">+ Dem.</button></td>
+      <td><div class="db"><div class="db-b"><div class="db-f" style="width:${Math.min(d/15*100,100)}%;background:${dC(d)}"></div></div><span class="db-n" style="color:${dC(d)}">${d}</span></div></td>
+      <td>${dB(d)}</td>
+      <td><button class="btn bsm bg2" onclick="goTo('registrar');setTimeout(()=>{const el=document.getElementById('rg-alum');if(el){el.value='${a.id}';rPreview('${a.id}')}},300)">+ Dem.</button></td>
     </tr>`;
-  }).join('') : '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--mu)">Sin resultados</td></tr>';
+  }).join(''):'<tr><td colspan="8" style="text-align:center;padding:28px;color:var(--mu)">Sin resultados</td></tr>';
 }
 
-function irRegistrar(aid){ navTo('registrar'); setTimeout(()=>{ const el=document.getElementById('reg-alum'); if(el){ el.value=aid; showRegPreview(aid); } },300); }
-
-// ══════════════════════════════════════════════════════
-//  SIGES IMPORT (admin only)
-// ══════════════════════════════════════════════════════
-function renderSiges(c){
-  c.innerHTML = `
-  <div style="max-width:680px">
+// ════════════════════════════════════
+//  SIGES
+// ════════════════════════════════════
+let sigesData=[];
+function siges(c) {
+  c.innerHTML=`
+  <div style="max-width:660px">
     <div class="card">
       <div class="ch"><span class="ct">📄 Importar Nómina desde SIGES</span></div>
       <div class="cb">
-        <p style="font-size:11px;color:var(--mu);margin-bottom:18px;line-height:1.8">Sube el archivo de nómina exportado desde <strong style="color:var(--ac2)">SIGES El Salvador</strong>. También puedes usar CSV con el formato indicado abajo.</p>
-        <div class="uz" id="siges-z" onclick="document.getElementById('siges-f').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="dropSiges(event)">
-          <input type="file" id="siges-f" accept=".csv,.xlsx,.pdf" onchange="loadSigesFile(event)">
-          <div style="font-size:36px;margin-bottom:10px">📑</div>
-          <div style="font-size:13px;font-weight:600;margin-bottom:4px">Arrastra el archivo aquí</div>
-          <div style="font-size:11px;color:var(--mu)">Formatos: PDF, CSV, Excel</div>
+        <p style="font-size:11px;color:var(--mu);margin-bottom:16px;line-height:1.8">Sube el archivo de matrícula exportado desde SIGES El Salvador (CSV recomendado).</p>
+        <div style="border:2px dashed var(--bd2);border-radius:10px;padding:34px 18px;text-align:center;cursor:pointer;background:var(--bg)" onclick="document.getElementById('sf').click()" id="sz">
+          <input type="file" id="sf" accept=".csv,.pdf" style="display:none" onchange="pSiges(event)">
+          <div style="font-size:32px;margin-bottom:8px">📑</div>
+          <div style="font-size:12px;font-weight:600;margin-bottom:4px">Arrastra o haz clic para subir</div>
+          <div style="font-size:10px;color:var(--mu)">CSV o PDF de nómina SIGES 2025</div>
         </div>
-        <div id="siges-prev"></div>
+        <div id="sg-prev"></div>
       </div>
     </div>
     <div class="card">
       <div class="ch"><span class="ct">📋 Plantilla CSV</span></div>
       <div class="cb">
-        <div style="background:var(--bg);border-radius:8px;padding:12px;font-family:var(--mo);font-size:10px;color:var(--ac2);line-height:2">
+        <div style="background:var(--bg);border-radius:7px;padding:11px;font-family:var(--mo);font-size:10px;color:var(--ac2);line-height:1.9">
           N°Lista,Nombre Completo,NIE,Sexo (M/H),Grado,Sección<br>
           1,García López Ana María,12345678,H,7° Básico,A<br>
           2,Rodríguez Pérez Carlos,87654321,M,7° Básico,A
         </div>
-        <button class="btn bg2 bsm" style="margin-top:10px" onclick="dlTemplate()">⬇️ Descargar plantilla</button>
+        <button class="btn bg2 bsm" style="margin-top:10px" onclick="dlTpl()">⬇️ Descargar plantilla</button>
       </div>
     </div>
   </div>`;
 }
-
-function dropSiges(e){ e.preventDefault(); document.getElementById('siges-z').classList.remove('drag'); parseSiges(e.dataTransfer.files[0]); }
-function loadSigesFile(e){ parseSiges(e.target.files[0]); }
-
-function parseSiges(file){
-  if(!file) return;
-  const ext=file.name.split('.').pop().toLowerCase();
-  if(ext==='csv'){ const r=new FileReader(); r.onload=e=>parseSigesCSV(e.target.result); r.readAsText(file,'utf-8'); }
-  else if(ext==='pdf'){ parseSigesPDF(file); }
-  else toast('Usa CSV o PDF','error');
-}
-
-function parseSigesCSV(text){
-  const lines=text.split('\n').filter(l=>l.trim());
-  SIGES_TMP=[];
+function pSiges(e){ const f=e.target.files[0]; if(!f) return; if(f.name.endsWith('.csv')){const r=new FileReader();r.onload=e=>pSigesCSV(e.target.result);r.readAsText(f,'utf-8');}else toast('Usa CSV para mejor resultado','info'); }
+function pSigesCSV(txt){
+  const lines=txt.split('\n').filter(l=>l.trim()); sigesData=[];
   for(let i=1;i<lines.length;i++){
-    const cols=lines[i].split(',').map(c=>c.trim().replace(/^"|"$/g,''));
-    if(cols.length>=2&&cols[1]) SIGES_TMP.push({lista:cols[0]||i,nombre:cols[1],nie:cols[2]||'',sexo:(cols[3]||'M').charAt(0).toUpperCase()==='H'?'H':'M',grado:cols[4]||'',seccion:cols[5]||''});
+    const c=lines[i].split(',').map(x=>x.trim().replace(/^"|"$/g,''));
+    if(c[1]) sigesData.push({lista:c[0]||i,nombre:c[1],nie:c[2]||'',sexo:c[3]?.charAt(0).toUpperCase()==='H'?'H':'M',grado:c[4]||'',seccion:c[5]||''});
   }
   showSigesPrev();
 }
-
-async function parseSigesPDF(file){
-  toast('Analizando PDF con IA...','info');
-  showLoading('Procesando PDF con IA...');
-  const b64 = await new Promise(res=>{ const r=new FileReader(); r.onload=e=>res(e.target.result.split(',')[1]); r.readAsDataURL(file); });
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,
-        messages:[{role:'user',content:[
-          {type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}},
-          {type:'text',text:'Extrae todos los estudiantes de este listado SIGES El Salvador. Devuelve SOLO un JSON array con objetos {lista,nombre,nie,sexo,grado,seccion}. Sin texto adicional ni backticks.'}
-        ]}]})
-    });
-    const data=await resp.json();
-    const txt=data.content?.find(c=>c.type==='text')?.text||'[]';
-    SIGES_TMP=JSON.parse(txt.replace(/```json|```/g,'').trim());
-    hideLoading(); showSigesPrev();
-    toast(`${SIGES_TMP.length} alumnos extraídos`,'success');
-  } catch { hideLoading(); toast('Error procesando PDF. Usa CSV.','error'); }
-}
-
 function showSigesPrev(){
-  if(!SIGES_TMP.length){ toast('Sin datos','error'); return; }
-  document.getElementById('siges-prev').innerHTML = `
+  if(!sigesData.length){toast('Sin datos','error');return;}
+  document.getElementById('sg-prev').innerHTML=`
     <div class="divider"></div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <span style="font-size:12px;font-weight:600">${SIGES_TMP.length} alumnos listos para importar</span>
-      <span class="bx bxb">${SIGES_TMP.length}</span>
-    </div>
-    <div class="tw" style="max-height:250px;overflow-y:auto"><table><thead><tr><th>N°</th><th>Nombre</th><th>NIE</th><th>Sexo</th><th>Grado</th></tr></thead><tbody>
-      ${SIGES_TMP.slice(0,20).map(a=>`<tr><td>${a.lista}</td><td>${a.nombre}</td><td style="font-family:var(--mo)">${a.nie||'—'}</td><td><span class="bx ${a.sexo==='M'?'bxb':'bxp'}">${a.sexo}</span></td><td>${a.grado||'—'}</td></tr>`).join('')}
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font-size:11px;font-weight:600">${sigesData.length} alumnos detectados</span><span class="bx bxb">${sigesData.length}</span></div>
+    <div class="tw" style="max-height:220px;overflow-y:auto"><table><thead><tr><th>N°</th><th>Nombre</th><th>NIE</th><th>Sexo</th><th>Grado</th></tr></thead><tbody>
+      ${sigesData.slice(0,15).map(a=>`<tr><td>${a.lista}</td><td>${a.nombre}</td><td style="font-family:var(--mo)">${a.nie||'—'}</td><td><span class="bx ${a.sexo==='M'?'bxb':'bxp'}">${a.sexo}</span></td><td>${a.grado||'—'}</td></tr>`).join('')}
     </tbody></table></div>
-    <div style="display:flex;gap:10px;margin-top:14px;align-items:flex-end">
-      <div class="fg" style="flex:1;margin:0"><label class="fl">Asignar a Sección</label><select class="fc" id="siges-sec">${secOpts(true,'Seleccionar sección...')}</select></div>
-      <button class="btn bp" onclick="importarSiges()">✅ Importar</button>
+    <div style="display:flex;gap:9px;margin-top:12px;align-items:flex-end">
+      <div class="fg" style="flex:1;margin:0"><label class="fl">Asignar a Sección</label><select class="fc" id="sg-sec">${secOpts(true,'Seleccionar...')}</select></div>
+      <button class="btn bp" onclick="importSiges()">✅ Importar</button>
     </div>`;
 }
-
-async function importarSiges(){
-  const sid=document.getElementById('siges-sec')?.value;
-  if(!sid){ toast('Selecciona una sección','error'); return; }
-  const sec=SECCIONES.find(s=>s.id===sid);
-  showLoading('Importando alumnos...');
-  const batch=db.batch();
-  let added=0;
-  SIGES_TMP.forEach((a,i)=>{
-    const exists=ALUMNOS.find(al=>al.nie&&al.nie===a.nie);
-    if(!exists){
+async function importSiges(){
+  const sid=document.getElementById('sg-sec')?.value;
+  if(!sid){toast('Selecciona una sección','error');return;}
+  const sec=SECS.find(s=>s.id===sid);
+  showLoad('Importando...');
+  const batch=db.batch(); let n=0;
+  sigesData.forEach((a,i)=>{
+    if(!ALUMS.find(al=>al.nie&&al.nie===a.nie)){
       const ref=db.collection('alumnos').doc();
       batch.set(ref,{nombre:a.nombre,nie:a.nie||'',sexo:a.sexo||'M',grado:a.grado||sec.grado,seccionId:sid,lista:Number(a.lista)||i+1,demeritos:0,creadoEn:new Date().toISOString()});
-      added++;
+      n++;
     }
   });
-  await batch.commit();
-  await loadAllData();
-  hideLoading();
-  toast(`✅ ${added} alumnos importados a ${sec.nombre}`,'success');
-  SIGES_TMP=[];
-  document.getElementById('siges-prev').innerHTML='';
+  await batch.commit(); await loadAll(); hideLoad();
+  toast(`✅ ${n} alumnos importados a ${sec.nombre}`,'success');
+  sigesData=[]; document.getElementById('sg-prev').innerHTML='';
 }
+function dlTpl(){const csv='\uFEFFN°Lista,Nombre Completo,NIE,Sexo (M/H),Grado,Sección\n1,García López Ana María,12345678,H,7° Básico,A\n';const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='plantilla-siges.csv';a.click();}
 
-function dlTemplate(){
-  const csv='\uFEFFN°Lista,Nombre Completo,NIE,Sexo (M/H),Grado,Sección\n1,García López Ana María,12345678,H,7° Básico,A\n2,Rodríguez Pérez Carlos,87654321,M,7° Básico,A\n';
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='plantilla-siges.csv';a.click();
-}
-
-// ══════════════════════════════════════════════════════
-//  REGISTRAR
-// ══════════════════════════════════════════════════════
-let rTipo='demerito', rCausalLetra='', rCausal='';
-function renderRegistrar(c){
-  c.innerHTML = `
-  <div style="display:grid;grid-template-columns:1fr 360px;gap:16px;max-width:960px">
+// ════════════════════════════════════
+//  REGISTRAR DEMÉRITO  (con descripción obligatoria)
+// ════════════════════════════════════
+let rTipo='demerito', rCL='', rC='';
+function registrar(c) {
+  c.innerHTML=`
+  <div style="display:grid;grid-template-columns:1fr 350px;gap:14px;max-width:950px">
     <div>
       <div class="card">
         <div class="ch"><span class="ct">➕ Nuevo Registro</span></div>
         <div class="cb">
-          <div class="fg"><label class="fl">Tipo</label>
+          <div class="fg"><label class="fl">Tipo de Registro</label>
             <div class="chips">
-              <div class="chip sel" onclick="selRTipo(this,'demerito')">❌ Demérito</div>
-              <div class="chip" onclick="selRTipo(this,'redencion')">🔄 Redención</div>
-              <div class="chip" onclick="selRTipo(this,'reconocimiento')">🌟 Reconocimiento</div>
+              <div class="chip sel" onclick="selT(this,'demerito')">❌ Demérito</div>
+              <div class="chip" onclick="selT(this,'redencion')">🔄 Redención</div>
+              <div class="chip" onclick="selT(this,'reconocimiento')">🌟 Reconocimiento</div>
             </div>
           </div>
           <div class="r2">
-            <div class="fg"><label class="fl">Sección</label><select class="fc" id="reg-sec" onchange="fillRegAlumnos()">${secOpts()}</select></div>
-            <div class="fg"><label class="fl">Alumno</label><select class="fc" id="reg-alum" onchange="showRegPreview(this.value)">${alumOpts()}</select></div>
+            <div class="fg"><label class="fl">Sección</label><select class="fc" id="rg-sec" onchange="fillRA()">${secOpts()}</select></div>
+            <div class="fg"><label class="fl">Alumno</label><select class="fc" id="rg-alum" onchange="rPreview(this.value)">${alumOpts()}</select></div>
           </div>
           <div id="fg-d" class="fg"><label class="fl">Causal — Art. 3</label>
             <div class="chips">
-              <div class="chip" onclick="selRCausal(this,'A','No saludar al entrar o salir del aula')">A — No saludó</div>
-              <div class="chip" onclick="selRCausal(this,'B','Omitir «Por favor»')">B — Sin «Por favor»</div>
-              <div class="chip" onclick="selRCausal(this,'C','Omitir «Gracias»')">C — Sin «Gracias»</div>
-              <div class="chip" onclick="selRCausal(this,'D','Tono grosero o irrespetuoso')">D — Tono grosero</div>
+              <div class="chip" onclick="selC(this,'A','No saludar al entrar o salir del aula')">A — No saludó</div>
+              <div class="chip" onclick="selC(this,'B','Omitir «Por favor»')">B — Sin «Por favor»</div>
+              <div class="chip" onclick="selC(this,'C','Omitir «Gracias»')">C — Sin «Gracias»</div>
+              <div class="chip" onclick="selC(this,'D','Tono grosero o irrespetuoso')">D — Tono grosero</div>
             </div>
           </div>
           <div id="fg-r" class="fg" style="display:none"><label class="fl">Opción Redención — Art. 6</label>
             <div class="chips">
-              <div class="chip" onclick="selRCausal(this,'A','Semana completa con saludos ejemplares')">A — Semana cortesía</div>
-              <div class="chip" onclick="selRCausal(this,'B','Apoyo voluntario en limpieza y orden')">B — Voluntariado</div>
-              <div class="chip" onclick="selRCausal(this,'C','Participación en campaña de valores')">C — Campaña valores</div>
+              <div class="chip" onclick="selC(this,'A','Semana completa con saludos ejemplares')">A — Semana cortesía</div>
+              <div class="chip" onclick="selC(this,'B','Apoyo voluntario en limpieza y orden')">B — Voluntariado</div>
+              <div class="chip" onclick="selC(this,'C','Participación en campaña de valores')">C — Campaña valores</div>
             </div>
           </div>
           <div id="fg-rc" class="fg" style="display:none"><label class="fl">Tipo Reconocimiento — Art. 7</label>
             <div class="chips">
-              <div class="chip" onclick="selRCausal(this,'A','Diploma de Cortesía Escolar')">A — Diploma</div>
-              <div class="chip" onclick="selRCausal(this,'B','Mención en Mural Escolar')">B — Mención Mural</div>
+              <div class="chip" onclick="selC(this,'A','Diploma de Cortesía Escolar')">A — Diploma</div>
+              <div class="chip" onclick="selC(this,'B','Mención en Mural Escolar')">B — Mención Mural</div>
             </div>
           </div>
-          <div class="fg"><label class="fl">Observación (opcional)</label><input class="fc" id="reg-obs" placeholder="Detalles..."></div>
-          <div class="r2">
-            <div class="fg"><label class="fl">Fecha</label><input type="date" class="fc" id="reg-fecha" value="${today()}"></div>
-            <div class="fg"><label class="fl">Docente que registra</label><input class="fc" id="reg-doc" value="${CUR_USER.nombre}" readonly></div>
+          <div class="fg">
+            <label class="fl">Descripción detallada <span style="color:var(--da)">*</span></label>
+            <textarea class="fc" id="rg-desc" placeholder="Describe detalladamente lo que ocurrió: hora, contexto, comportamiento del estudiante..." rows="4"></textarea>
+            <div style="font-size:9px;color:var(--mu);margin-top:3px">Este texto quedará registrado en la bitácora oficial del docente.</div>
           </div>
-          <button class="btn bp" onclick="guardarRegistro()" style="width:100%;padding:11px">✅ Guardar Registro</button>
+          <div class="r2">
+            <div class="fg"><label class="fl">Fecha</label><input type="date" class="fc" id="rg-fecha" value="${today()}"></div>
+            <div class="fg"><label class="fl">Docente que registra</label><input class="fc" id="rg-doc" value="${U.nombre}" readonly></div>
+          </div>
+          <button class="btn bp" onclick="saveReg()" style="width:100%;padding:11px">✅ Guardar Registro</button>
         </div>
       </div>
     </div>
-    <div id="reg-preview"></div>
+    <div id="rg-prev"></div>
   </div>`;
 }
-
-function selRTipo(el,tipo){
-  rTipo=tipo; rCausalLetra=''; rCausal='';
-  document.querySelectorAll('#main-content .chip').forEach(c=>c.classList.remove('sel')); el.classList.add('sel');
-  document.getElementById('fg-d').style.display=tipo==='demerito'?'block':'none';
-  document.getElementById('fg-r').style.display=tipo==='redencion'?'block':'none';
-  document.getElementById('fg-rc').style.display=tipo==='reconocimiento'?'block':'none';
+function selT(el,t){ rTipo=t; rCL=''; rC='';
+  document.querySelectorAll('#content .chip').forEach(c=>c.classList.remove('sel')); el.classList.add('sel');
+  document.getElementById('fg-d').style.display=t==='demerito'?'block':'none';
+  document.getElementById('fg-r').style.display=t==='redencion'?'block':'none';
+  document.getElementById('fg-rc').style.display=t==='reconocimiento'?'block':'none';
 }
-
-function selRCausal(el,l,txt){
-  rCausalLetra=l; rCausal=txt;
-  el.closest('.chips').querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));
-  el.classList.add('sel');
-}
-
-function fillRegAlumnos(){
-  const sid=document.getElementById('reg-sec')?.value;
-  const ra=document.getElementById('reg-alum'); if(!ra) return;
-  ra.innerHTML=alumOpts(sid);
-}
-
-function showRegPreview(aid){
-  const a=ALUMNOS.find(al=>al.id===aid);
-  const panel=document.getElementById('reg-preview'); if(!panel) return;
-  if(!a){ panel.innerHTML=''; return; }
-  const s=SECCIONES.find(sc=>sc.id===a.seccionId);
-  const recs=REGISTROS.filter(r=>r.alumnoId===aid).slice(0,5);
-  panel.innerHTML=`
+function selC(el,l,t){ rCL=l; rC=t; el.closest('.chips').querySelectorAll('.chip').forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); }
+function fillRA(){ const sid=document.getElementById('rg-sec')?.value; const ra=document.getElementById('rg-alum'); if(!ra) return; ra.innerHTML=alumOpts(sid); }
+function rPreview(aid){
+  const a=ALUMS.find(al=>al.id===aid);
+  const p=document.getElementById('rg-prev'); if(!p) return;
+  if(!a){p.innerHTML='';return;}
+  const s=SECS.find(sc=>sc.id===a.seccionId);
+  const d=a.demeritos||0;
+  const recs=REGS.filter(r=>r.alumnoId===aid).slice(0,5);
+  p.innerHTML=`
     <div class="card">
-      <div class="ch"><span class="ct">👤 ${a.nombre}</span>${demBadge(a.demeritos||0)}</div>
+      <div class="ch"><span class="ct">👤 ${a.nombre}</span>${dB(d)}</div>
       <div class="cb">
-        <div style="display:flex;gap:10px;margin-bottom:12px;align-items:center">
-          ${avHtml(a.nombre,42)}
-          <div><div style="font-size:14px;font-weight:700">${a.nombre}</div>
-          <div style="font-size:10px;color:var(--mu)">${a.nie||'—'} · ${a.sexo==='M'?'♂ Masculino':'♀ Femenino'}</div>
+        <div style="display:flex;gap:9px;margin-bottom:10px;align-items:center">
+          ${av(a.nombre,40)}
+          <div><div style="font-size:13px;font-weight:700">${a.nombre}</div>
+          <div style="font-size:10px;color:var(--mu)">${a.nie||'—'} · ${a.sexo==='M'?'♂':'♀'}</div>
           <div style="font-size:10px;color:var(--mu)">${s?.nombre||'—'} · ${a.grado}</div></div>
         </div>
-        <div class="db" style="margin-bottom:8px">
-          <div class="db-b" style="max-width:none;flex:1;height:7px"><div class="db-f" style="width:${Math.min((a.demeritos||0)/15*100,100)}%;background:${demColor(a.demeritos||0)}"></div></div>
-          <span style="font-family:var(--mo);font-weight:800;color:${demColor(a.demeritos||0)}">${a.demeritos||0}/15</span>
+        <div class="db" style="margin-bottom:7px">
+          <div class="db-b" style="max-width:none;flex:1;height:6px"><div class="db-f" style="width:${Math.min(d/15*100,100)}%;background:${dC(d)}"></div></div>
+          <span style="font-family:var(--mo);font-weight:800;color:${dC(d)}">${d}/15</span>
         </div>
-        ${consecuencia(a.demeritos||0)}
-        ${recs.length?`<div style="margin-top:12px">${recs.map(r=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--bd);font-size:10px">
-          <span><span class="bx ${r.tipo==='demerito'?'bxr':r.tipo==='redencion'?'bxg':'bxgold'}">${r.causalLetra}</span> ${r.causal||''}</span>
-          <span style="color:var(--mu);font-family:var(--mo)">${fmt(r.fecha)}</span></div>`).join('')}</div>`:''}
+        ${cons(d)}
+        ${recs.length?`<div style="margin-top:10px">${recs.map(r=>`
+          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bd);font-size:10px">
+            <span><span class="bx ${r.tipo==='demerito'?'bxr':r.tipo==='redencion'?'bxg':'bxgo'}">${r.causalLetra}</span> ${(r.descripcion||r.causal||'').substring(0,35)}</span>
+            <span style="color:var(--mu);font-family:var(--mo)">${fmt(r.fecha)}</span>
+          </div>`).join('')}</div>`:''}
       </div>
     </div>`;
 }
-
-async function guardarRegistro(){
-  const aid=document.getElementById('reg-alum')?.value;
-  const fecha=document.getElementById('reg-fecha')?.value||today();
-  const obs=document.getElementById('reg-obs')?.value||'';
-  const docente=CUR_USER.nombre;
-  if(!aid){ toast('Selecciona un alumno','error'); return; }
-  if(!rCausalLetra){ toast('Selecciona la causal/opción','error'); return; }
-  showLoading('Guardando...');
-  const a=ALUMNOS.find(al=>al.id===aid);
-  let newDem = a.demeritos||0;
-  if(rTipo==='demerito') newDem++;
-  else if(rTipo==='redencion') newDem=Math.max(0,newDem-1);
+async function saveReg(){
+  const aid=document.getElementById('rg-alum')?.value;
+  const desc=document.getElementById('rg-desc')?.value.trim();
+  const fecha=document.getElementById('rg-fecha')?.value||today();
+  if(!aid){toast('Selecciona un alumno','error');return;}
+  if(!rCL){toast('Selecciona la causal/opción','error');return;}
+  if(!desc){document.getElementById('rg-desc').classList.add('req');toast('La descripción es obligatoria','error');return;}
+  document.getElementById('rg-desc').classList.remove('req');
+  const a=ALUMS.find(al=>al.id===aid);
+  let nd=a.demeritos||0;
+  if(rTipo==='demerito') nd++;
+  else if(rTipo==='redencion') nd=Math.max(0,nd-1);
+  showLoad('Guardando...');
   const batch=db.batch();
-  batch.update(db.collection('alumnos').doc(aid),{demeritos:newDem});
-  const rRef=db.collection('registros').doc();
-  batch.set(rRef,{alumnoId:aid,tipo:rTipo,causalLetra:rCausalLetra,causal:rCausal,obs,docente,docenteId:CUR_USER.docenteId,fecha,creadoEn:new Date().toISOString()});
-  await batch.commit();
-  await loadAllData();
-  hideLoading();
-  toast(`${rTipo} registrado: ${a.nombre}`,'success');
-  if(rTipo==='demerito'){
-    const m={3:'⚠️ Advertencia verbal requerida',6:'🔶 Comunicar a familia',10:'🚨 Suspensión de privilegios',15:'🔴 NO PROMOVIDO DE GRADO'};
-    if(m[newDem]) setTimeout(()=>toast(m[newDem],'error'),700);
-  }
-  showRegPreview(aid);
-  document.getElementById('reg-obs').value='';
+  batch.update(db.collection('alumnos').doc(aid),{demeritos:nd});
+  batch.set(db.collection('registros').doc(),{
+    alumnoId:aid, tipo:rTipo, causalLetra:rCL, causal:rC,
+    descripcion:desc, docente:U.nombre, docenteId:U.docenteId,
+    docenteEmail:U.email, fecha, creadoEn:new Date().toISOString()
+  });
+  await batch.commit(); await loadAll(); hideLoad();
+  toast(`${rTipo} guardado: ${a.nombre}`,'success');
+  const alrt={3:'⚠️ 3 dem — Advertencia verbal requerida',6:'🔶 6 dem — Comunicar a familia',10:'🚨 10 dem — Suspensión privilegios',15:'🔴 15 dem — NO PROMOVIDO DE GRADO'};
+  if(rTipo==='demerito'&&alrt[nd]) setTimeout(()=>toast(alrt[nd],'error'),700);
+  document.getElementById('rg-desc').value='';
+  rPreview(aid);
 }
 
-// ══════════════════════════════════════════════════════
+// ════════════════════════════════════
+//  DEMÉRITO RÁPIDO
+// ════════════════════════════════════
+let qdCL='', qdC='';
+function quickDem(){
+  const el=document.createElement('div'); el.id='qd-wrap';
+  el.innerHTML=`
+    <div style="position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(6px);z-index:2000" onclick="document.getElementById('qd-wrap').remove()"></div>
+    <div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2001;width:min(480px,95vw)">
+      <div class="card">
+        <div class="ch"><span class="ct">⚡ Demérito Rápido</span><button class="btn bg2 bsm" onclick="document.getElementById('qd-wrap').remove()">✕</button></div>
+        <div class="cb">
+          <div class="r2">
+            <div class="fg"><label class="fl">Sección</label><select class="fc" id="qd-sec" onchange="qfillA()">${secOpts()}</select></div>
+            <div class="fg"><label class="fl">Alumno</label><select class="fc" id="qd-alum">${alumOpts()}</select></div>
+          </div>
+          <div class="fg"><label class="fl">Causal</label>
+            <div class="chips">
+              <div class="chip" onclick="qSelC(this,'A','No saludar al entrar o salir del aula')">A — No saludó</div>
+              <div class="chip" onclick="qSelC(this,'B','Omitir «Por favor»')">B — Sin «Por favor»</div>
+              <div class="chip" onclick="qSelC(this,'C','Omitir «Gracias»')">C — Sin «Gracias»</div>
+              <div class="chip" onclick="qSelC(this,'D','Tono grosero o irrespetuoso')">D — Tono grosero</div>
+            </div>
+          </div>
+          <div class="fg"><label class="fl">Descripción <span style="color:var(--da)">*</span></label><textarea class="fc" id="qd-desc" placeholder="Describe lo que ocurrió..." rows="3"></textarea></div>
+          <button class="btn bdr" onclick="saveQD()" style="width:100%;padding:10px">Registrar Demérito</button>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(el);
+}
+function qfillA(){ const sid=document.getElementById('qd-sec')?.value; const ra=document.getElementById('qd-alum'); if(!ra) return; ra.innerHTML=alumOpts(sid); }
+function qSelC(el,l,t){ qdCL=l; qdC=t; el.closest('.chips').querySelectorAll('.chip').forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); }
+async function saveQD(){
+  const aid=document.getElementById('qd-alum')?.value;
+  const desc=document.getElementById('qd-desc')?.value.trim();
+  if(!aid||!qdCL){toast('Selecciona alumno y causal','error');return;}
+  if(!desc){toast('La descripción es obligatoria','error');return;}
+  const a=ALUMS.find(al=>al.id===aid); const nd=(a.demeritos||0)+1;
+  showLoad('Guardando...');
+  const batch=db.batch();
+  batch.update(db.collection('alumnos').doc(aid),{demeritos:nd});
+  batch.set(db.collection('registros').doc(),{alumnoId:aid,tipo:'demerito',causalLetra:qdCL,causal:qdC,descripcion:desc,docente:U.nombre,docenteId:U.docenteId,docenteEmail:U.email,fecha:today(),creadoEn:new Date().toISOString()});
+  await batch.commit(); await loadAll(); hideLoad();
+  document.getElementById('qd-wrap')?.remove();
+  toast(`Demérito: ${a.nombre} (${nd} total)`,'success');
+  const m={3:'⚠️ Advertencia verbal',6:'🔶 Comunicar a familia',10:'🚨 Suspensión privilegios',15:'🔴 NO PROMOVIDO'};
+  if(m[nd]) setTimeout(()=>toast(m[nd],'error'),700);
+  qdCL=''; qdC='';
+}
+
+// ════════════════════════════════════
 //  HISTORIAL
-// ══════════════════════════════════════════════════════
-function renderHistorial(c){
-  const myRegs=regsInMyScope();
+// ════════════════════════════════════
+function historial(c){
   c.innerHTML=`
   <div class="sb-s">
-    <input class="si" id="q-hist" placeholder="Buscar..." oninput="filtHist()">
-    <select class="fc" style="width:150px" id="f-sec-hist" onchange="filtHist()">${secOpts()}</select>
-    <select class="fc" style="width:130px" id="f-tipo-hist" onchange="filtHist()"><option value="">Todos</option><option value="demerito">Deméritos</option><option value="redencion">Redenciones</option><option value="reconocimiento">Reconocimientos</option></select>
-    <select class="fc" style="width:130px" id="f-mes-hist" onchange="filtHist()"><option value="">Todos los meses</option>${meses.slice(1).map((m,i)=>`<option value="${String(i+1).padStart(2,'0')}">${m}</option>`).join('')}</select>
+    <input class="si" id="qh" placeholder="Buscar..." oninput="filtH()">
+    <select class="fc" style="width:145px" id="fh-sec" onchange="filtH()">${secOpts()}</select>
+    <select class="fc" style="width:130px" id="fh-t" onchange="filtH()"><option value="">Todos</option><option value="demerito">Deméritos</option><option value="redencion">Redenciones</option><option value="reconocimiento">Reconocimientos</option></select>
+    <select class="fc" style="width:125px" id="fh-m" onchange="filtH()"><option value="">Todos los meses</option>${MES.slice(1).map((m,i)=>`<option value="${String(i+1).padStart(2,'0')}">${m}</option>`).join('')}</select>
   </div>
   <div class="card">
-    <div class="ch"><span class="ct">📋 Historial</span><span class="bx bxb" id="hist-c">${myRegs.length}</span></div>
-    <div class="tw"><table><thead><tr><th>Fecha</th><th>Alumno</th><th>Sexo</th><th>Sección</th><th>Tipo</th><th>Causal</th><th>Observación</th><th>Docente</th></tr></thead><tbody id="hist-b"></tbody></table></div>
+    <div class="ch"><span class="ct">📋 Historial Completo</span><span class="bx bxb" id="h-cnt">0</span></div>
+    <div class="tw"><table><thead><tr><th>Fecha</th><th>Alumno</th><th>Sexo</th><th>Sección</th><th>Tipo</th><th>Causal</th><th>Descripción</th><th>Docente</th></tr></thead><tbody id="h-tb"></tbody></table></div>
   </div>`;
-  filtHist();
+  filtH();
 }
-
-function filtHist(){
-  const q=(document.getElementById('q-hist')?.value||'').toLowerCase();
-  const sec=document.getElementById('f-sec-hist')?.value||'';
-  const tipo=document.getElementById('f-tipo-hist')?.value||'';
-  const mes=document.getElementById('f-mes-hist')?.value||'';
-  let list=regsInMyScope();
-  if(q) list=list.filter(r=>{ const a=ALUMNOS.find(al=>al.id===r.alumnoId); return a?.nombre.toLowerCase().includes(q)||(r.causal||'').toLowerCase().includes(q); });
-  if(sec) list=list.filter(r=>ALUMNOS.find(al=>al.id===r.alumnoId)?.seccionId===sec);
-  if(tipo) list=list.filter(r=>r.tipo===tipo);
+function filtH(){
+  const q=(document.getElementById('qh')?.value||'').toLowerCase();
+  const sec=document.getElementById('fh-sec')?.value||'';
+  const tip=document.getElementById('fh-t')?.value||'';
+  const mes=document.getElementById('fh-m')?.value||'';
+  let list=myRegs();
+  if(q) list=list.filter(r=>{const a=ALUMS.find(al=>al.id===r.alumnoId);return a?.nombre.toLowerCase().includes(q)||(r.descripcion||'').toLowerCase().includes(q)||(r.docente||'').toLowerCase().includes(q);});
+  if(sec) list=list.filter(r=>ALUMS.find(al=>al.id===r.alumnoId)?.seccionId===sec);
+  if(tip) list=list.filter(r=>r.tipo===tip);
   if(mes) list=list.filter(r=>r.fecha?.split('-')[1]===mes);
-  const cnt=document.getElementById('hist-c'); if(cnt) cnt.textContent=list.length;
-  const tbody=document.getElementById('hist-b'); if(!tbody) return;
-  tbody.innerHTML=list.map(r=>{
-    const a=ALUMNOS.find(al=>al.id===r.alumnoId);
-    const s=SECCIONES.find(sc=>sc.id===a?.seccionId);
-    const t=r.tipo==='demerito'?'<span class="bx bxr">❌ Dem</span>':r.tipo==='redencion'?'<span class="bx bxg">🔄 Red</span>':'<span class="bx bxgold">🌟 Rec</span>';
-    return `<tr><td style="font-family:var(--mo);font-size:10px;color:var(--mu)">${fmt(r.fecha)}</td>
-    <td style="font-size:10px">${a?.nombre||'?'}</td>
-    <td><span class="bx ${a?.sexo==='M'?'bxb':'bxp'}">${a?.sexo||'?'}</span></td>
-    <td><span class="sp">${s?.nombre||'?'}</span></td>
-    <td>${t}</td><td><span class="bx bxb">${r.causalLetra||'?'}</span> <span style="font-size:10px;color:var(--mu)">${r.causal||''}</span></td>
-    <td style="font-size:10px;color:var(--mu)">${r.obs||'—'}</td>
-    <td style="font-size:10px;color:var(--mu)">${r.docente||'—'}</td></tr>`;
-  }).join('') || '<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--mu)">Sin registros</td></tr>';
+  const cnt=document.getElementById('h-cnt'); if(cnt) cnt.textContent=list.length;
+  const tb=document.getElementById('h-tb'); if(!tb) return;
+  tb.innerHTML=list.map(r=>{
+    const a=ALUMS.find(al=>al.id===r.alumnoId);
+    const s=SECS.find(sc=>sc.id===a?.seccionId);
+    const t=r.tipo==='demerito'?'<span class="bx bxr">❌ Dem</span>':r.tipo==='redencion'?'<span class="bx bxg">🔄 Red</span>':'<span class="bx bxgo">🌟 Rec</span>';
+    return `<tr>
+      <td style="font-family:var(--mo);font-size:9px;color:var(--mu)">${fmt(r.fecha)}</td>
+      <td style="font-size:10px;font-weight:600">${a?.nombre||'?'}</td>
+      <td><span class="bx ${a?.sexo==='M'?'bxb':'bxp'}">${a?.sexo||'?'}</span></td>
+      <td><span class="sp">${s?.nombre||'?'}</span></td>
+      <td>${t}</td>
+      <td><span class="bx bxb">${r.causalLetra||'?'}</span></td>
+      <td style="font-size:10px;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${(r.descripcion||r.causal||'').replace(/"/g,'&quot;')}">${r.descripcion||r.causal||'—'}</td>
+      <td style="font-size:10px;color:var(--mu)">${r.docente||'—'}</td>
+    </tr>`;
+  }).join('')||'<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--mu)">Sin registros</td></tr>';
 }
 
-// ══════════════════════════════════════════════════════
+// ════════════════════════════════════
 //  REDENCIÓN
-// ══════════════════════════════════════════════════════
-function renderRedencion(c){
-  const conDem=alumsInMyScope().filter(a=>a.demeritos>0).sort((a,b)=>b.demeritos-a.demeritos);
+// ════════════════════════════════════
+let redCL='', redC='';
+function redencion(c){
+  const conD=myAlums().filter(a=>(a.demeritos||0)>0).sort((a,b)=>b.demeritos-a.demeritos);
   c.innerHTML=`
   <div style="max-width:560px">
     <div class="card">
       <div class="ch"><span class="ct">🔄 Registrar Redención</span></div>
       <div class="cb">
         <div class="fg"><label class="fl">Alumno con Deméritos Activos</label>
-          <select class="fc" id="red-alum" onchange="showRedPrev(this.value)">
+          <select class="fc" id="rd-alum" onchange="rdPrev(this.value)">
             <option value="">Seleccionar alumno...</option>
-            ${conDem.map(a=>{ const s=SECCIONES.find(sc=>sc.id===a.seccionId); return `<option value="${a.id}">${a.nombre} — ${a.demeritos} dem. (${s?.nombre||'—'})</option>`; }).join('')}
+            ${conD.map(a=>{ const s=SECS.find(sc=>sc.id===a.seccionId); return `<option value="${a.id}">${a.nombre} — ${a.demeritos} dem. (${s?.nombre||'—'})</option>`; }).join('')}
           </select>
         </div>
-        <div class="fg"><label class="fl">Opción de Redención (Art. 6)</label>
+        <div class="fg"><label class="fl">Opción de Redención — Art. 6</label>
           <div class="chips">
-            <div class="chip" onclick="selRedOp(this,'A','Semana completa con saludos ejemplares')">A — Semana cortesía</div>
-            <div class="chip" onclick="selRedOp(this,'B','Apoyo voluntario en limpieza y orden')">B — Voluntariado</div>
-            <div class="chip" onclick="selRedOp(this,'C','Participación en campaña de valores')">C — Campaña valores</div>
+            <div class="chip" onclick="selRd(this,'A','Semana completa con saludos ejemplares')">A — Semana cortesía</div>
+            <div class="chip" onclick="selRd(this,'B','Apoyo voluntario en limpieza y orden')">B — Voluntariado</div>
+            <div class="chip" onclick="selRd(this,'C','Participación en campaña de valores')">C — Campaña valores</div>
           </div>
         </div>
-        <div class="fg"><label class="fl">Deméritos a Reducir</label><input type="number" class="fc" id="red-cant" value="1" min="1" style="width:90px"></div>
-        <div class="fg"><label class="fl">Responsable del Cumplimiento</label><input class="fc" id="red-resp" value="${CUR_USER.nombre}" placeholder="Nombre del docente que certifica..."></div>
-        <div id="red-prev" style="margin-bottom:10px"></div>
-        <button class="btn bsc" onclick="guardarRedencion()" style="width:100%;padding:11px">✅ Registrar Redención</button>
+        <div class="fg"><label class="fl">Descripción / Evidencia</label><textarea class="fc" id="rd-desc" placeholder="Describe cómo cumplió la redención..." rows="3"></textarea></div>
+        <div class="r2">
+          <div class="fg"><label class="fl">Deméritos a Reducir</label><input type="number" class="fc" id="rd-cant" value="1" min="1" style="width:80px"></div>
+          <div class="fg"><label class="fl">Responsable que Certifica</label><input class="fc" id="rd-resp" value="${U.nombre}"></div>
+        </div>
+        <div id="rd-prev" style="margin-bottom:10px"></div>
+        <button class="btn bsu" onclick="saveRed()" style="width:100%;padding:11px">✅ Registrar Redención</button>
       </div>
     </div>
   </div>`;
 }
-
-let redOpLetra='', redOp='';
-function selRedOp(el,l,txt){ redOpLetra=l; redOp=txt; el.closest('.chips').querySelectorAll('.chip').forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); }
-function showRedPrev(aid){
-  const a=ALUMNOS.find(al=>al.id===aid);
-  const p=document.getElementById('red-prev'); if(!p) return;
-  if(!a){ p.innerHTML=''; return; }
-  const s=SECCIONES.find(sc=>sc.id===a.seccionId);
-  p.innerHTML=`<div style="padding:10px 12px;background:var(--bg);border-radius:8px;display:flex;justify-content:space-between;align-items:center"><div style="display:flex;gap:7px;align-items:center">${avHtml(a.nombre)}<div style="font-size:12px;font-weight:600">${a.nombre} <span style="color:var(--mu);font-weight:400">${s?.nombre||'—'}</span></div></div>${demBadge(a.demeritos||0)}</div>`;
+function selRd(el,l,t){ redCL=l; redC=t; el.closest('.chips').querySelectorAll('.chip').forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); }
+function rdPrev(aid){
+  const a=ALUMS.find(al=>al.id===aid); const p=document.getElementById('rd-prev'); if(!p) return;
+  if(!a){p.innerHTML='';return;}
+  const s=SECS.find(sc=>sc.id===a.seccionId);
+  p.innerHTML=`<div style="padding:9px 11px;background:var(--bg);border-radius:8px;display:flex;justify-content:space-between;align-items:center"><div style="display:flex;gap:7px;align-items:center">${av(a.nombre)}<span style="font-size:11px;font-weight:600">${a.nombre} <span style="color:var(--mu);font-weight:400">${s?.nombre||'—'}</span></span></div>${dB(a.demeritos||0)}</div>`;
 }
-
-async function guardarRedencion(){
-  const aid=document.getElementById('red-alum')?.value;
-  const cant=parseInt(document.getElementById('red-cant')?.value)||1;
-  const resp=document.getElementById('red-resp')?.value||CUR_USER.nombre;
-  if(!aid||!redOpLetra){ toast('Selecciona alumno y opción','error'); return; }
-  const a=ALUMNOS.find(al=>al.id===aid);
-  const newDem=Math.max(0,(a.demeritos||0)-cant);
-  showLoading('Guardando...');
-  const batch=db.batch();
-  batch.update(db.collection('alumnos').doc(aid),{demeritos:newDem});
-  batch.set(db.collection('registros').doc(),{alumnoId:aid,tipo:'redencion',causalLetra:redOpLetra,causal:redOp,obs:`Redujo ${cant} | Resp: ${resp}`,docente:CUR_USER.nombre,docenteId:CUR_USER.docenteId,fecha:today(),creadoEn:new Date().toISOString()});
-  await batch.commit();
-  await loadAllData();
-  hideLoading();
-  toast(`Redención registrada: ${a.nombre} — ahora tiene ${newDem} deméritos`,'success');
-  renderView('redencion');
-}
-
-// ══════════════════════════════════════════════════════
-//  QUICK DEMERITO
-// ══════════════════════════════════════════════════════
-let qdCausalLetra='', qdCausal='';
-function quickDemerito(){
-  const myAlums=alumsInMyScope();
-  const html=`
-    <div class="card" style="max-width:460px;margin:0 auto;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2001;max-height:90vh;overflow-y:auto">
-      <div class="ch"><span class="ct">⚡ Demérito Rápido</span><button class="btn bg2 bsm" onclick="document.getElementById('qd-panel').remove()">✕</button></div>
-      <div class="cb">
-        <div class="fg"><label class="fl">Sección</label>
-          <select class="fc" id="qd-sec" onchange="fillQDAlumnos()">
-            ${secOpts(false,'Seleccionar...')}
-          </select>
-        </div>
-        <div class="fg"><label class="fl">Alumno</label><select class="fc" id="qd-alum">${alumOpts()}</select></div>
-        <div class="fg"><label class="fl">Causal</label>
-          <div class="chips">
-            <div class="chip" onclick="selQDCausal(this,'A','No saludar al entrar o salir del aula')">A — No saludó</div>
-            <div class="chip" onclick="selQDCausal(this,'B','Omitir «Por favor»')">B — Sin «Por favor»</div>
-            <div class="chip" onclick="selQDCausal(this,'C','Omitir «Gracias»')">C — Sin «Gracias»</div>
-            <div class="chip" onclick="selQDCausal(this,'D','Tono grosero o irrespetuoso')">D — Tono grosero</div>
-          </div>
-        </div>
-        <button class="btn bd2c" onclick="confirmarQD()" style="width:100%;padding:10px">Registrar Demérito</button>
-      </div>
-    </div>
-    <div style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:2000" onclick="document.getElementById('qd-panel').remove();this.remove()"></div>`;
-  const el=document.createElement('div'); el.id='qd-panel'; el.innerHTML=html;
-  document.body.appendChild(el);
-}
-
-function fillQDAlumnos(){ const sid=document.getElementById('qd-sec')?.value; const ra=document.getElementById('qd-alum'); if(!ra) return; ra.innerHTML=alumOpts(sid); }
-function selQDCausal(el,l,txt){ qdCausalLetra=l; qdCausal=txt; el.closest('.chips').querySelectorAll('.chip').forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); }
-async function confirmarQD(){
-  const aid=document.getElementById('qd-alum')?.value;
-  if(!aid||!qdCausalLetra){ toast('Selecciona alumno y causal','error'); return; }
-  const a=ALUMNOS.find(al=>al.id===aid);
-  const nd=(a.demeritos||0)+1;
-  showLoading('Guardando...');
+async function saveRed(){
+  const aid=document.getElementById('rd-alum')?.value;
+  const cant=parseInt(document.getElementById('rd-cant')?.value)||1;
+  const desc=document.getElementById('rd-desc')?.value.trim();
+  const resp=document.getElementById('rd-resp')?.value||U.nombre;
+  if(!aid||!redCL){toast('Selecciona alumno y opción','error');return;}
+  if(!desc){toast('La descripción es obligatoria','error');return;}
+  const a=ALUMS.find(al=>al.id===aid);
+  const nd=Math.max(0,(a.demeritos||0)-cant);
+  showLoad('Guardando...');
   const batch=db.batch();
   batch.update(db.collection('alumnos').doc(aid),{demeritos:nd});
-  batch.set(db.collection('registros').doc(),{alumnoId:aid,tipo:'demerito',causalLetra:qdCausalLetra,causal:qdCausal,obs:'',docente:CUR_USER.nombre,docenteId:CUR_USER.docenteId,fecha:today(),creadoEn:new Date().toISOString()});
-  await batch.commit();
-  await loadAllData();
-  hideLoading();
-  document.getElementById('qd-panel')?.remove();
-  document.querySelectorAll('[onclick*="qd-panel"]').forEach(e=>e.remove());
-  toast(`Demérito: ${a.nombre} (${nd} total)`,'success');
-  const m={3:'⚠️ Advertencia verbal',6:'🔶 Comunicar a familia',10:'🚨 Suspensión privilegios',15:'🔴 NO PROMOVIDO'};
-  if(m[nd]) setTimeout(()=>toast(m[nd],'error'),700);
-  qdCausalLetra=''; qdCausal='';
+  batch.set(db.collection('registros').doc(),{alumnoId:aid,tipo:'redencion',causalLetra:redCL,causal:redC,descripcion:desc,docente:U.nombre,docenteId:U.docenteId,docenteEmail:U.email,responsable:resp,fecha:today(),creadoEn:new Date().toISOString()});
+  await batch.commit(); await loadAll(); hideLoad();
+  toast(`Redención: ${a.nombre} → ${nd} deméritos`,'success');
+  redencion(document.getElementById('content'));
 }
 
-// ══════════════════════════════════════════════════════
-//  INFORMES
-// ══════════════════════════════════════════════════════
-function renderInf001(c){
+// ════════════════════════════════════
+//  CASOS CORRECTIVOS
+// ════════════════════════════════════
+function correctivos(c){
+  const ma=myAlums();
+  const g3=ma.filter(a=>(a.demeritos||0)>=3&&(a.demeritos||0)<6);
+  const g6=ma.filter(a=>(a.demeritos||0)>=6&&(a.demeritos||0)<10);
+  const g10=ma.filter(a=>(a.demeritos||0)>=10&&(a.demeritos||0)<15);
+  const g15=ma.filter(a=>(a.demeritos||0)>=15);
+
+  const tbl=(list,cls,lbl)=>list.length?`
+    <div class="card">
+      <div class="ch"><span class="ct">${lbl}</span><span class="bx ${cls}">${list.length}</span></div>
+      <div class="tw"><table><thead><tr><th>Alumno</th><th>Sección</th><th>Deméritos</th><th>Correctivo pendiente</th><th>Acción</th></tr></thead><tbody>
+        ${list.map(a=>{
+          const s=SECS.find(sc=>sc.id===a.seccionId);
+          const d=a.demeritos||0;
+          const correq=d>=15?'Retención de grado — Acta de compromiso':d>=10?'Reunión dirección + familia · Última advertencia':d>=6?'Comunicar a familia + Tarea correctiva':'Advertencia verbal + Reflexión escrita';
+          return `<tr>
+            <td><div style="display:flex;align-items:center;gap:7px">${av(a.nombre)}<div><div style="font-weight:600">${a.nombre}</div><div style="font-size:9px;color:var(--mu)">${a.nie||'—'}</div></div></div></td>
+            <td><span class="sp">${s?.nombre||'—'}</span></td>
+            <td style="font-family:var(--mo);color:${dC(d)};font-weight:700">${d}</td>
+            <td style="font-size:10px">${correq}</td>
+            <td>
+              <button class="btn bg2 bsm" onclick="regCorrectivo('${a.id}')">📝 Registrar</button>
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody></table></div>
+    </div>`:'';
+
+  c.innerHTML=`
+  <p style="font-size:11px;color:var(--mu);margin-bottom:16px;line-height:1.7">Lista de alumnos que han alcanzado umbrales de consecuencias según el Art. 5 del Reglamento y requieren acción correctiva.</p>
+  ${g15.length?tbl(g15,'bxp','🔴 15+ Deméritos — No Promovido de Grado'):''}
+  ${g10.length?tbl(g10,'bxr','🚨 10-14 Deméritos — Reunión con Dirección y Familia'):''}
+  ${g6.length?tbl(g6,'bxo','🔶 6-9 Deméritos — Comunicación a Familia'):''}
+  ${g3.length?tbl(g3,'bxy','⚠️ 3-5 Deméritos — Advertencia Verbal'):''}
+  ${!g3.length&&!g6.length&&!g10.length&&!g15.length?'<div style="text-align:center;padding:60px 20px;color:var(--mu)"><div style="font-size:44px">🎉</div><p style="margin-top:10px">¡Sin alumnos con correctivos pendientes!</p></div>':''}`;
+}
+
+function regCorrectivo(aid){
+  const a=ALUMS.find(al=>al.id===aid); if(!a) return;
+  const el=document.createElement('div'); el.id='corr-w';
+  const d=a.demeritos||0;
+  const s=SECS.find(sc=>sc.id===a.seccionId);
+  const sugs=d>=15?'Se realizó acta de compromiso con los padres de familia y el estudiante. Se informó sobre la imposibilidad de promoción de grado.':d>=10?'Se realizó reunión con la dirección del centro y la familia del estudiante. Se emitió última advertencia formal.':d>=6?'Se comunicó a la familia mediante llamada/citatorio. Se asignó tarea correctiva sobre la importancia de la cortesía.':'Se realizó advertencia verbal al estudiante. Se solicitó redactar una reflexión escrita sobre la importancia de la cortesía.';
+  el.innerHTML=`
+    <div style="position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(6px);z-index:2000" onclick="document.getElementById('corr-w').remove()"></div>
+    <div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2001;width:min(520px,95vw)">
+      <div class="card">
+        <div class="ch">
+          <span class="ct">📝 Registrar Correctivo — ${a.nombre}</span>
+          <button class="btn bg2 bsm" onclick="document.getElementById('corr-w').remove()">✕</button>
+        </div>
+        <div class="cb">
+          <div style="background:var(--bg);border-radius:8px;padding:10px 12px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center">
+            <div style="display:flex;gap:8px;align-items:center">${av(a.nombre,36)}<div><div style="font-weight:600;font-size:12px">${a.nombre}</div><div style="font-size:10px;color:var(--mu)">${s?.nombre||'—'} · ${d} deméritos</div></div></div>
+            ${dB(d)}
+          </div>
+          ${cons(d)}
+          <div class="fg" style="margin-top:12px"><label class="fl">Tipo de Correctivo Aplicado</label>
+            <select class="fc" id="co-tipo">
+              <option value="advertencia_verbal">Advertencia verbal + Reflexión escrita (3 dem.)</option>
+              <option value="comunicacion_familia">Comunicación a familia + Tarea correctiva (6 dem.)</option>
+              <option value="reunion_direccion">Reunión con dirección y familia (10+ dem.)</option>
+              <option value="acta_compromiso">Acta de compromiso + Retención de grado (15 dem.)</option>
+            </select>
+          </div>
+          <div class="fg"><label class="fl">Descripción detallada del correctivo aplicado <span style="color:var(--da)">*</span></label>
+            <textarea class="fc" id="co-desc" rows="5" placeholder="Describe el correctivo aplicado...">${sugs}</textarea>
+          </div>
+          <div class="fg"><label class="fl">Fecha del Correctivo</label><input type="date" class="fc" id="co-fecha" value="${today()}" style="width:160px"></div>
+          <button class="btn bwa" onclick="saveCorrectivo('${aid}')" style="width:100%;padding:10px">💾 Guardar Correctivo</button>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(el);
+  if(d>=10) document.getElementById('co-tipo').value='reunion_direccion';
+  if(d>=15) document.getElementById('co-tipo').value='acta_compromiso';
+  if(d>=6&&d<10) document.getElementById('co-tipo').value='comunicacion_familia';
+}
+
+async function saveCorrectivo(aid){
+  const tipo=document.getElementById('co-tipo')?.value;
+  const desc=document.getElementById('co-desc')?.value.trim();
+  const fecha=document.getElementById('co-fecha')?.value||today();
+  if(!desc){toast('La descripción es obligatoria','error');return;}
+  const a=ALUMS.find(al=>al.id===aid);
+  showLoad('Guardando correctivo...');
+  await db.collection('registros').add({
+    alumnoId:aid, tipo:'correctivo', tipoCorrectivo:tipo,
+    descripcion:desc, docente:U.nombre, docenteId:U.docenteId,
+    docenteEmail:U.email, fecha, creadoEn:new Date().toISOString(), causalLetra:'C', causal:'Correctivo aplicado'
+  });
+  await loadAll(); hideLoad();
+  document.getElementById('corr-w')?.remove();
+  toast(`Correctivo registrado: ${a.nombre}`,'success');
+}
+
+// ════════════════════════════════════
+//  BITÁCORA DE ESCRITOS DOCENTES
+// ════════════════════════════════════
+function bitacora(c){
+  c.innerHTML=`
+  <div class="sb-s">
+    <input class="si" id="qb" placeholder="Buscar alumno o docente..." oninput="filtB()">
+    <select class="fc" style="width:145px" id="fb-sec" onchange="filtB()">${secOpts()}</select>
+    <select class="fc" style="width:145px" id="fb-doc" onchange="filtB()"><option value="">Todos los docentes</option>${DOCS.filter(d=>MY_SECS.some(s=>s.id===d.secGuiaId||(d.secsImparte||[]).includes(s.id))||U.rol==='admin').map(d=>`<option value="${d.id}">${d.nombre}</option>`).join('')}</select>
+    <select class="fc" style="width:120px" id="fb-m" onchange="filtB()"><option value="">Todos los meses</option>${MES.slice(1).map((m,i)=>`<option value="${String(i+1).padStart(2,'0')}">${m}</option>`).join('')}</select>
+  </div>
+  <div class="card">
+    <div class="ch">
+      <span class="ct">📓 Bitácora Oficial de Escritos Docentes</span>
+      <div style="display:flex;gap:6px">
+        <span class="bx bxb" id="bit-cnt">0</span>
+        <button class="btn bpu bsm" onclick="genBitacoraPDF()">📄 Exportar PDF</button>
+      </div>
+    </div>
+    <div class="cb" style="padding:12px">
+      <div id="bit-list"></div>
+    </div>
+  </div>`;
+  filtB();
+}
+
+function filtB(){
+  const q=(document.getElementById('qb')?.value||'').toLowerCase();
+  const sec=document.getElementById('fb-sec')?.value||'';
+  const docId=document.getElementById('fb-doc')?.value||'';
+  const mes=document.getElementById('fb-m')?.value||'';
+  let list=myRegs().filter(r=>r.descripcion);
+  if(q) list=list.filter(r=>{const a=ALUMS.find(al=>al.id===r.alumnoId);return a?.nombre.toLowerCase().includes(q)||(r.docente||'').toLowerCase().includes(q)||(r.descripcion||'').toLowerCase().includes(q);});
+  if(sec) list=list.filter(r=>ALUMS.find(al=>al.id===r.alumnoId)?.seccionId===sec);
+  if(docId) list=list.filter(r=>r.docenteId===docId);
+  if(mes) list=list.filter(r=>r.fecha?.split('-')[1]===mes);
+  const cnt=document.getElementById('bit-cnt'); if(cnt) cnt.textContent=list.length;
+  const cont=document.getElementById('bit-list'); if(!cont) return;
+  cont.innerHTML=list.length?list.map(r=>{
+    const a=ALUMS.find(al=>al.id===r.alumnoId);
+    const s=SECS.find(sc=>sc.id===a?.seccionId);
+    const tipoLabel=r.tipo==='demerito'?'Demérito':r.tipo==='redencion'?'Redención':r.tipo==='correctivo'?'Correctivo':'Reconocimiento';
+    const tipoColor=r.tipo==='demerito'?'bxr':r.tipo==='redencion'?'bxg':r.tipo==='correctivo'?'bxy':'bxgo';
+    return `<div class="log-entry">
+      <div class="log-meta">
+        <div style="display:flex;align-items:center;gap:8px">
+          ${av(a?.nombre||'?',32)}
+          <div>
+            <div style="font-size:12px;font-weight:700">${a?.nombre||'?'}</div>
+            <div style="font-size:9px;color:var(--mu)">${s?.nombre||'—'} · ${a?.grado||''} · NIE: ${a?.nie||'—'}</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+          <span class="bx ${tipoColor}">${tipoLabel}</span>
+          <span class="bx bxb">${r.causalLetra||'?'}</span>
+          <span style="font-family:var(--mo);font-size:10px;color:var(--mu)">${fmt(r.fecha)}</span>
+        </div>
+      </div>
+      <div class="log-desc">${r.descripcion||'—'}</div>
+      <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center">
+        <div style="display:flex;align-items:center;gap:6px">
+          ${av(r.docente||'?',22)}
+          <span style="font-size:10px;color:var(--mu)"><strong style="color:var(--tx)">${r.docente||'—'}</strong> · ${r.docenteEmail||''}</span>
+        </div>
+        <span style="font-size:9px;color:var(--mu);font-family:var(--mo)">${r.creadoEn?new Date(r.creadoEn).toLocaleString('es-SV'):'—'}</span>
+      </div>
+    </div>`;
+  }).join(''):'<div style="text-align:center;padding:40px;color:var(--mu)">Sin escritos registrados</div>';
+}
+
+function genBitacoraPDF(){
+  const q=(document.getElementById('qb')?.value||'').toLowerCase();
+  const sec=document.getElementById('fb-sec')?.value||'';
+  const docId=document.getElementById('fb-doc')?.value||'';
+  const mes=document.getElementById('fb-m')?.value||'';
+  let list=myRegs().filter(r=>r.descripcion);
+  if(q) list=list.filter(r=>{const a=ALUMS.find(al=>al.id===r.alumnoId);return a?.nombre.toLowerCase().includes(q)||(r.docente||'').toLowerCase().includes(q);});
+  if(sec) list=list.filter(r=>ALUMS.find(al=>al.id===r.alumnoId)?.seccionId===sec);
+  if(docId) list=list.filter(r=>r.docenteId===docId);
+  if(mes) list=list.filter(r=>r.fecha?.split('-')[1]===mes);
+  if(!list.length){toast('No hay registros para exportar','error');return;}
+  const {jsPDF}=window.jspdf;
+  const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'letter'});
+  const W=215.9, M=15;
+  let y=15;
+  pdf.setFontSize(10); pdf.setFont('helvetica','bold');
+  pdf.text('MINISTERIO DE EDUCACIÓN, CIENCIA Y TECNOLOGÍA',W/2,y,{align:'center'}); y+=5;
+  pdf.setFontSize(13); pdf.text('Bitácora Oficial de Escritos Docentes',W/2,y,{align:'center'}); y+=5;
+  pdf.setFontSize(9); pdf.setFont('helvetica','normal'); pdf.setTextColor(100);
+  pdf.text(`Centro Escolar: ${CE.nombre||'—'}  ·  Código: ${CE.codigo||'—'}  ·  Generado: ${new Date().toLocaleDateString('es-SV')}`,W/2,y,{align:'center'}); y+=8;
+  pdf.setTextColor(0);
+  list.forEach((r,i)=>{
+    if(y>240){pdf.addPage();y=20;}
+    const a=ALUMS.find(al=>al.id===r.alumnoId);
+    const s=SECS.find(sc=>sc.id===a?.seccionId);
+    const tipo=r.tipo==='demerito'?'Demérito':r.tipo==='redencion'?'Redención':r.tipo==='correctivo'?'Correctivo':'Reconocimiento';
+    // Box
+    pdf.setDrawColor(40,80,150); pdf.setFillColor(10,25,41);
+    pdf.roundedRect(M,y,W-M*2,2.5,1,1,'FD');
+    y+=5;
+    pdf.setFontSize(9); pdf.setFont('helvetica','bold');
+    pdf.text(`${i+1}. ${a?.nombre||'?'}`,M,y);
+    pdf.setFont('helvetica','normal');
+    pdf.text(`${s?.nombre||'—'} · ${a?.grado||''} · NIE: ${a?.nie||'—'}  |  ${tipo} — Causal ${r.causalLetra}  |  ${fmt(r.fecha)}`,M,y+4);
+    y+=9;
+    pdf.setFontSize(8.5);
+    const descLines=pdf.splitTextToSize(r.descripcion||'—',W-M*2-4);
+    descLines.forEach(l=>{
+      if(y>246){pdf.addPage();y=20;}
+      pdf.text(l,M+2,y); y+=4.2;
+    });
+    y+=2;
+    pdf.setFontSize(7.5); pdf.setTextColor(100);
+    pdf.text(`Docente: ${r.docente||'—'}  ·  ${r.docenteEmail||''}  ·  ${r.creadoEn?new Date(r.creadoEn).toLocaleString('es-SV'):'—'}`,M,y); y+=6;
+    pdf.setTextColor(0);
+  });
+  y+=4;
+  pdf.setFontSize(9); pdf.setFont('helvetica','normal');
+  pdf.text('Nombre, firma y sello del Director del C. E. ___________________________',M,y);
+  const nm=mes?MES[parseInt(mes)]:'General';
+  pdf.save(`Bitacora_Docentes_${nm}_${new Date().getFullYear()}.pdf`);
+  toast('✅ Bitácora PDF generada','success');
+}
+
+// ════════════════════════════════════
+//  INSTRUMENTO 001
+// ════════════════════════════════════
+function inf001(c){
   c.innerHTML=`
   <div style="max-width:620px">
     <div class="card">
       <div class="ch"><span class="ct">📝 Instrumento No. 001 — Tarjeta Individual del Estudiante</span></div>
       <div class="cb">
-        <p style="font-size:11px;color:var(--mu);margin-bottom:16px;line-height:1.7">Genera la Tarjeta de Deméritos oficial por estudiante (MINEDUCYT). Puedes generar un PDF individual o todos los alumnos de una sección en un ZIP.</p>
+        <p style="font-size:11px;color:var(--mu);margin-bottom:14px;line-height:1.8">Genera la Tarjeta de Deméritos oficial por estudiante según el formato MINEDUCYT.</p>
         <div class="r2">
-          <div class="fg"><label class="fl">Sección</label><select class="fc" id="i1-sec" onchange="fillI1Alums()">${secOpts()}</select></div>
-          <div class="fg"><label class="fl">Alumno</label><select class="fc" id="i1-alum">${alumOpts()}</select></div>
+          <div class="fg"><label class="fl">Sección</label><select class="fc" id="i1-s" onchange="fillI1A()">${secOpts()}</select></div>
+          <div class="fg"><label class="fl">Alumno</label><select class="fc" id="i1-a">${alumOpts()}</select></div>
         </div>
         <div class="r2">
-          <div class="fg"><label class="fl">Filtrar por Mes</label><select class="fc" id="i1-mes"><option value="">Todos los meses</option>${meses.slice(1).map((m,i)=>`<option value="${String(i+1).padStart(2,'0')}">${m}</option>`).join('')}</select></div>
-          <div class="fg"><label class="fl">Año</label><input class="fc" id="i1-anio" value="2025"></div>
+          <div class="fg"><label class="fl">Filtrar Mes</label><select class="fc" id="i1-m"><option value="">Todos</option>${MES.slice(1).map((m,i)=>`<option value="${String(i+1).padStart(2,'0')}">${m}</option>`).join('')}</select></div>
+          <div class="fg"><label class="fl">Año</label><input class="fc" id="i1-y" value="2025"></div>
         </div>
-        <div style="display:flex;gap:8px;margin-top:4px">
-          <button class="btn bp" onclick="genInf001()" style="flex:1;padding:11px">📄 Generar PDF Individual</button>
-          <button class="btn bwc" onclick="genInf001Seccion()" style="flex:1;padding:11px">📦 Generar Toda la Sección</button>
+        <div style="display:flex;gap:8px">
+          <button class="btn bp" onclick="genI001Ind()" style="flex:1;padding:10px">📄 PDF Individual</button>
+          <button class="btn bwa" onclick="genI001Sec()" style="flex:1;padding:10px">📦 Toda la Sección</button>
         </div>
       </div>
     </div>
-    <div id="i1-prev"></div>
   </div>`;
 }
-
-function fillI1Alums(){
-  const sid=document.getElementById('i1-sec')?.value;
-  const ra=document.getElementById('i1-alum'); if(!ra) return;
-  ra.innerHTML=alumOpts(sid,'Seleccionar alumno...');
+function fillI1A(){ const sid=document.getElementById('i1-s')?.value; const ra=document.getElementById('i1-a'); if(!ra) return; ra.innerHTML=alumOpts(sid,'Seleccionar alumno...'); }
+function genI001Ind(){ const aid=document.getElementById('i1-a')?.value; if(!aid){toast('Selecciona un alumno','error');return;} const a=ALUMS.find(al=>al.id===aid); buildI001(a,document.getElementById('i1-m')?.value||'',document.getElementById('i1-y')?.value||'2025',true); }
+async function genI001Sec(){
+  const sid=document.getElementById('i1-s')?.value; if(!sid){toast('Selecciona una sección','error');return;}
+  const als=ALUMS.filter(a=>a.seccionId===sid); if(!als.length){toast('Sin alumnos','error');return;}
+  showLoad(`Generando ${als.length} PDFs...`);
+  const {jsPDF}=window.jspdf; const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'letter'});
+  let first=true;
+  for(const a of als){ if(!first) pdf.addPage(); buildI001Pages(a,'',document.getElementById('i1-y')?.value||'2025',pdf); first=false; }
+  const sec=SECS.find(s=>s.id===sid);
+  pdf.save(`Instrumento001_${sec?.nombre||'Sec'}_${document.getElementById('i1-y')?.value||'2025'}.pdf`);
+  hideLoad(); toast(`✅ PDF con ${als.length} alumnos generado`,'success');
 }
-
-function genInf001(){
-  const aid=document.getElementById('i1-alum')?.value;
-  const mes=document.getElementById('i1-mes')?.value||'';
-  const anio=document.getElementById('i1-anio')?.value||'2025';
-  if(!aid){ toast('Selecciona un alumno','error'); return; }
-  const a=ALUMNOS.find(al=>al.id===aid);
-  buildPDF001(a, mes, anio);
-}
-
-async function genInf001Seccion(){
-  const sid=document.getElementById('i1-sec')?.value;
-  const mes=document.getElementById('i1-mes')?.value||'';
-  const anio=document.getElementById('i1-anio')?.value||'2025';
-  if(!sid){ toast('Selecciona una sección','error'); return; }
-  const alums=ALUMNOS.filter(a=>a.seccionId===sid);
-  if(!alums.length){ toast('No hay alumnos en esta sección','error'); return; }
-  showLoading(`Generando ${alums.length} PDFs...`);
-  // Build individual PDFs merged into one
-  const { jsPDF } = window.jspdf;
-  const merged = new jsPDF({ orientation:'portrait', unit:'mm', format:'letter' });
-  let first = true;
-  for(const a of alums){
-    if(!first) merged.addPage();
-    buildPDF001Pages(a, mes, anio, merged);
-    first = false;
-  }
-  const sec=SECCIONES.find(s=>s.id===sid);
-  merged.save(`Instrumento001_${sec?.nombre||'Seccion'}_${anio}.pdf`);
-  hideLoading();
-  toast(`✅ PDF con ${alums.length} alumnos generado`,'success');
-}
-
-function buildPDF001(a, mes, anio){
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'letter' });
-  buildPDF001Pages(a, mes, anio, doc);
-  doc.save(`Instrumento001_${a.nombre.replace(/ /g,'_')}_${mes?meses[parseInt(mes)]:'Todo'}_${anio}.pdf`);
+function buildI001(a,mes,anio,save=true){
+  const {jsPDF}=window.jspdf; const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'letter'});
+  buildI001Pages(a,mes,anio,pdf);
+  if(save) pdf.save(`Instrumento001_${a.nombre.replace(/ /g,'_')}_${mes?MES[parseInt(mes)]:'Todo'}_${anio}.pdf`);
   toast('✅ PDF generado','success');
+  return pdf;
 }
-
-function buildPDF001Pages(a, mes, anio, doc){
-  const W=215.9, M=14;
-  const sec=SECCIONES.find(s=>s.id===a.seccionId);
-  let regs=REGISTROS.filter(r=>r.alumnoId===a.id);
+function buildI001Pages(a,mes,anio,pdf){
+  const W=215.9,M=14,rH=6.4;
+  const s=SECS.find(sc=>sc.id===a.seccionId);
+  let regs=REGS.filter(r=>r.alumnoId===a.id&&r.tipo!=='correctivo');
   if(mes) regs=regs.filter(r=>r.fecha?.split('-')[1]===mes);
   regs.sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
 
-  doc.setFontSize(8); doc.setFont('helvetica','bold');
-  doc.text('MINISTERIO DE EDUCACIÓN, CIENCIA Y TECNOLOGÍA', W-M, 10, {align:'right'});
-  doc.setFontSize(12); doc.text('Instrumento No. 001', W/2, 20, {align:'center'});
-  doc.setFontSize(11); doc.text('Tarjeta de Deméritos del Estudiante', W/2, 26, {align:'center'});
+  pdf.setFontSize(8); pdf.setFont('helvetica','bold');
+  pdf.text('MINISTERIO DE EDUCACIÓN, CIENCIA Y TECNOLOGÍA',W-M,9,{align:'right'});
+  pdf.setFontSize(12); pdf.text('Instrumento No. 001',W/2,18,{align:'center'});
+  pdf.setFontSize(11); pdf.text('Tarjeta de Deméritos del Estudiante',W/2,24,{align:'center'});
 
-  let y=34;
-  const df=(lbl,val,x,y2,endX)=>{
-    doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.text(lbl,x,y2);
-    doc.setFont('helvetica','normal'); doc.text(String(val||''),x+doc.getTextWidth(lbl)+1,y2);
-    doc.line(x+doc.getTextWidth(lbl)+1,y2+0.5,endX,y2+0.5);
-  };
-  df('1. Nombre del Centro Educativo: ',CE.nombre||'',M,y,170);
-  df('2. Código del C.E.: ',CE.codigo||'',172,y,202);
-  y+=5.5;
-  df('3. Departamento del C.E.: ',CE.depto||'',M,y,72);
-  df('4. Municipio: ',CE.muni||'',74,y,135);
-  df('5. Distrito: ',CE.dist||'',137,y,188);
-  y+=5.5;
-  df('6. Nombre del Estudiante: ',a.nombre,M,y,162);
-  df('7. NIE: ',a.nie||'',164,y,202);
-  y+=5.5;
-  df('8. Sexo: ',a.sexo==='M'?'Masculino':'Femenino',M,y,50);
-  df('9. Grado/Sección: ',`${a.grado||''} "${sec?.nombre||''}"`,52,y,150);
-  df('10. Turno: ',sec?.turno||CE.turno||'Matutino',152,y,202);
-  y+=7;
+  let y=32;
+  const df=(l,v,x,y2,ex)=>{pdf.setFontSize(8);pdf.setFont('helvetica','bold');pdf.text(l,x,y2);pdf.setFont('helvetica','normal');pdf.text(String(v||''),x+pdf.getTextWidth(l)+1,y2);pdf.line(x+pdf.getTextWidth(l)+1,y2+.5,ex,y2+.5);};
+  df('1. Nombre del Centro Educativo: ',CE.nombre||'',M,y,170); df('2. Código del C.E.: ',CE.codigo||'',172,y,202); y+=5.5;
+  df('3. Departamento: ',CE.depto||'',M,y,72); df('4. Municipio: ',CE.muni||'',74,y,135); df('5. Distrito: ',CE.dist||'',137,y,202); y+=5.5;
+  df('6. Nombre del Estudiante: ',a.nombre,M,y,162); df('7. NIE: ',a.nie||'',164,y,202); y+=5.5;
+  df('8. Sexo: ',a.sexo==='M'?'Masculino':'Femenino',M,y,50); df('9. Grado/Sección: ',`${a.grado||''} "${s?.nombre||''}"`,52,y,150); df('10. Turno: ',s?.turno||CE.turno||'Matutino',152,y,202); y+=7;
 
-  // Info boxes
-  const bH=34; const bW=(W-M*2)/4;
-  const boxes=[
-    ['Art. 3. Asignación',['A) No saludar al entrar','o salir del aula.','B) Omitir "Por favor"','al hacer petición.','C) Omitir "Gracias" al','recibir favor.','D) Tono grosero o','irrespetuoso.']],
-    ['Art. 5. Consecuencias',['3 dem: Advertencia verbal.','6 dem: Comunicar familia','+ tarea correctiva.','10 dem: Suspensión','de privilegios.','15 dem: No promovido','de grado.']],
-    ['Art. 6. Redención',['A) Semana completa','con saludos ejemplares.','B) Voluntariado en','orden y limpieza.','C) Participar en','campaña de valores.']],
-    ['Art. 7. Reconocimientos',['Alumnos con cero dem.','reciben Mención','Honorífica mensual.','A) Diplomas','B) Menciones en','Murales Escolares.']]
-  ];
-  boxes.forEach((b,i)=>{
-    doc.rect(M+i*bW,y,bW,bH);
-    doc.setFontSize(6.5); doc.setFont('helvetica','bold');
-    doc.text(b[0],M+i*bW+1,y+4);
-    doc.setFont('helvetica','normal');
-    b[1].forEach((l,j)=>doc.text(l,M+i*bW+1,y+8+j*3.2));
+  const bH=34,bW=(W-M*2)/4;
+  [['Art. 3. Asignación',['A) No saludar al entrar','o salir del aula.','B) Omitir "Por favor"','al hacer petición.','C) Omitir "Gracias" al','recibir favor.','D) Tono grosero o','irrespetuoso.']],
+   ['Art. 5. Consecuencias',['3 dem: Advertencia verbal.','6 dem: Comunicar familia','+ tarea correctiva.','10 dem: Suspensión','de privilegios.','15 dem: No promovido','de grado.']],
+   ['Art. 6. Redención',['A) Semana completa','con saludos ejemplares.','B) Voluntariado en','orden y limpieza.','C) Participar en','campaña de valores.']],
+   ['Art. 7. Reconocimientos',['Alumnos con cero dem.','reciben Mención','Honorífica mensual.','A) Diplomas','B) Menciones en','Murales Escolares.']]
+  ].forEach((b,i)=>{
+    pdf.rect(M+i*bW,y,bW,bH);
+    pdf.setFontSize(6.5);pdf.setFont('helvetica','bold');pdf.text(b[0],M+i*bW+1,y+4);
+    pdf.setFont('helvetica','normal');b[1].forEach((l,j)=>pdf.text(l,M+i*bW+1,y+8+j*3.2));
   });
   y+=bH+4;
+  pdf.setFontSize(7);pdf.setFont('helvetica','bold');pdf.text('● 12. D: Deméritos   13. R: Redención   14. RC: Reconocimiento',M,y);y+=4;
 
-  doc.setFontSize(7); doc.setFont('helvetica','bold');
-  doc.text('● 12. D: Deméritos   13. R: Redención   14. RC: Reconocimiento',M,y);
-  y+=4;
-
-  // Table
-  const rH=6.2;
-  const cNoW=8, cFecW=12, cDW=8.75, cRW=8, cRCW=8;
-  const cFirmaW=(W-M*2-cNoW-cFecW-cDW*4-cRW*3-cRCW*2)/2;
-  doc.setFontSize(6.5); doc.setFont('helvetica','bold');
-  // Headers row 1
-  doc.rect(M,y,cNoW,rH*2);
-  doc.rect(M+cNoW,y,cFecW,rH*2);
-  doc.rect(M+cNoW+cFecW,y,cDW*4,rH);
-  doc.rect(M+cNoW+cFecW+cDW*4,y,cRW*3,rH);
-  doc.rect(M+cNoW+cFecW+cDW*4+cRW*3,y,cRCW*2,rH);
-  doc.rect(M+cNoW+cFecW+cDW*4+cRW*3+cRCW*2,y,cFirmaW,rH*2);
-  doc.rect(M+cNoW+cFecW+cDW*4+cRW*3+cRCW*2+cFirmaW,y,cFirmaW,rH*2);
-  doc.rect(M+cNoW+cFecW+cDW*4+cRW*3+cRCW*2+cFirmaW*2,y,12,rH*2);
-
-  const ct=(t,x,y2,w)=>doc.text(t,x+w/2,y2,{align:'center'});
-  ct('No.',M,y+4,cNoW); ct('Fecha',M+cNoW,y+4,cFecW);
-  ct('12. D',M+cNoW+cFecW,y+3,cDW*4);
-  ct('13. R',M+cNoW+cFecW+cDW*4,y+3,cRW*3);
-  ct('14.RC',M+cNoW+cFecW+cDW*4+cRW*3,y+3,cRCW*2);
-  ct('15. Nombre y firma',M+cNoW+cFecW+cDW*4+cRW*3+cRCW*2,y+4,cFirmaW);
-  ct('16. Resp. Redención',M+cNoW+cFecW+cDW*4+cRW*3+cRCW*2+cFirmaW,y+4,cFirmaW);
-  ct('17.',M+cNoW+cFecW+cDW*4+cRW*3+cRCW*2+cFirmaW*2,y+4,12);
-
-  // Sub headers
+  const cNo=8,cFec=12,cD=8.75,cR=8,cRC=8;
+  const fW=(W-M*2-cNo-cFec-cD*4-cR*3-cRC*2)/2;
+  pdf.setFontSize(6.5);pdf.setFont('helvetica','bold');
+  pdf.rect(M,y,cNo,rH*2);pdf.rect(M+cNo,y,cFec,rH*2);
+  pdf.rect(M+cNo+cFec,y,cD*4,rH);pdf.rect(M+cNo+cFec+cD*4,y,cR*3,rH);pdf.rect(M+cNo+cFec+cD*4+cR*3,y,cRC*2,rH);
+  pdf.rect(M+cNo+cFec+cD*4+cR*3+cRC*2,y,fW,rH*2);pdf.rect(M+cNo+cFec+cD*4+cR*3+cRC*2+fW,y,fW,rH*2);pdf.rect(M+cNo+cFec+cD*4+cR*3+cRC*2+fW*2,y,12,rH*2);
+  const ct=(t,x,w)=>pdf.text(t,x+w/2,y+4,{align:'center'});
+  ct('No.',M,cNo);ct('Fecha',M+cNo,cFec);ct('12. D',M+cNo+cFec,cD*4);ct('13. R',M+cNo+cFec+cD*4,cR*3);ct('14.RC',M+cNo+cFec+cD*4+cR*3,cRC*2);
+  ct('15. Nombre y firma de quien registra',M+cNo+cFec+cD*4+cR*3+cRC*2,fW);ct('16. Resp. Redención',M+cNo+cFec+cD*4+cR*3+cRC*2+fW,fW);ct('17.',M+cNo+cFec+cD*4+cR*3+cRC*2+fW*2,12);
   y+=rH;
-  ['A','B','C','D'].forEach((l,i)=>{ doc.rect(M+cNoW+cFecW+i*cDW,y,cDW,rH); ct(l,M+cNoW+cFecW+i*cDW,y+4,cDW); });
-  ['A','B','C'].forEach((l,i)=>{ doc.rect(M+cNoW+cFecW+cDW*4+i*cRW,y,cRW,rH); ct(l,M+cNoW+cFecW+cDW*4+i*cRW,y+4,cRW); });
-  ['A','B'].forEach((l,i)=>{ doc.rect(M+cNoW+cFecW+cDW*4+cRW*3+i*cRCW,y,cRCW,rH); ct(l,M+cNoW+cFecW+cDW*4+cRW*3+i*cRCW,y+4,cRCW); });
+  ['A','B','C','D'].forEach((l,i)=>{pdf.rect(M+cNo+cFec+i*cD,y,cD,rH);pdf.text(l,M+cNo+cFec+i*cD+cD/2,y+4,{align:'center'});});
+  ['A','B','C'].forEach((l,i)=>{pdf.rect(M+cNo+cFec+cD*4+i*cR,y,cR,rH);pdf.text(l,M+cNo+cFec+cD*4+i*cR+cR/2,y+4,{align:'center'});});
+  ['A','B'].forEach((l,i)=>{pdf.rect(M+cNo+cFec+cD*4+cR*3+i*cRC,y,cRC,rH);pdf.text(l,M+cNo+cFec+cD*4+cR*3+i*cRC+cRC/2,y+4,{align:'center'});});
   y+=rH;
 
-  const totC={A:0,B:0,C:0,D:0},totR={A:0,B:0,C:0},totRC={A:0,B:0};
-  doc.setFont('helvetica','normal');
+  const tC={A:0,B:0,C:0,D:0},tR={A:0,B:0,C:0},tRC={A:0,B:0};
+  pdf.setFont('helvetica','normal');
   let row=1;
   regs.forEach(r=>{
-    if(y>248){ doc.addPage(); y=20; }
-    doc.rect(M,y,cNoW,rH); ct(String(row),M,y+4,cNoW);
-    doc.rect(M+cNoW,y,cFecW,rH); ct(fmt(r.fecha),M+cNoW,y+3.5,cFecW);
-    ['A','B','C','D'].forEach((l,i)=>{ doc.rect(M+cNoW+cFecW+i*cDW,y,cDW,rH); if(r.tipo==='demerito'&&r.causalLetra===l){ct('X',M+cNoW+cFecW+i*cDW,y+4,cDW);totC[l]++;} });
-    ['A','B','C'].forEach((l,i)=>{ doc.rect(M+cNoW+cFecW+cDW*4+i*cRW,y,cRW,rH); if(r.tipo==='redencion'&&r.causalLetra===l){ct('X',M+cNoW+cFecW+cDW*4+i*cRW,y+4,cRW);totR[l]++;} });
-    ['A','B'].forEach((l,i)=>{ doc.rect(M+cNoW+cFecW+cDW*4+cRW*3+i*cRCW,y,cRCW,rH); if(r.tipo==='reconocimiento'&&r.causalLetra===l){ct('X',M+cNoW+cFecW+cDW*4+cRW*3+i*cRCW,y+4,cRCW);totRC[l]++;} });
-    doc.rect(M+cNoW+cFecW+cDW*4+cRW*3+cRCW*2,y,cFirmaW,rH);
-    doc.setFontSize(5.5); doc.text((r.docente||'').substring(0,22),M+cNoW+cFecW+cDW*4+cRW*3+cRCW*2+1,y+4);
-    doc.rect(M+cNoW+cFecW+cDW*4+cRW*3+cRCW*2+cFirmaW,y,cFirmaW,rH);
-    doc.rect(M+cNoW+cFecW+cDW*4+cRW*3+cRCW*2+cFirmaW*2,y,12,rH);
-    doc.setFontSize(6.5);
-    row++; y+=rH;
+    if(y>248){pdf.addPage();y=20;}
+    pdf.rect(M,y,cNo,rH);pdf.text(String(row),M+cNo/2,y+4,{align:'center'});
+    pdf.rect(M+cNo,y,cFec,rH);pdf.text(fmt(r.fecha),M+cNo+cFec/2,y+4,{align:'center'});
+    ['A','B','C','D'].forEach((l,i)=>{pdf.rect(M+cNo+cFec+i*cD,y,cD,rH);if(r.tipo==='demerito'&&r.causalLetra===l){pdf.text('X',M+cNo+cFec+i*cD+cD/2,y+4,{align:'center'});tC[l]++;}});
+    ['A','B','C'].forEach((l,i)=>{pdf.rect(M+cNo+cFec+cD*4+i*cR,y,cR,rH);if(r.tipo==='redencion'&&r.causalLetra===l){pdf.text('X',M+cNo+cFec+cD*4+i*cR+cR/2,y+4,{align:'center'});tR[l]++;}});
+    ['A','B'].forEach((l,i)=>{pdf.rect(M+cNo+cFec+cD*4+cR*3+i*cRC,y,cRC,rH);if(r.tipo==='reconocimiento'&&r.causalLetra===l){pdf.text('X',M+cNo+cFec+cD*4+cR*3+i*cRC+cRC/2,y+4,{align:'center'});tRC[l]++;}});
+    pdf.rect(M+cNo+cFec+cD*4+cR*3+cRC*2,y,fW,rH);
+    pdf.setFontSize(5.5);pdf.text((r.docente||'').substring(0,22),M+cNo+cFec+cD*4+cR*3+cRC*2+1,y+4);pdf.setFontSize(6.5);
+    pdf.rect(M+cNo+cFec+cD*4+cR*3+cRC*2+fW,y,fW,rH);pdf.rect(M+cNo+cFec+cD*4+cR*3+cRC*2+fW*2,y,12,rH);
+    row++;y+=rH;
   });
   while(row<=8){
-    doc.rect(M,y,cNoW,rH); ct(String(row),M,y+4,cNoW);
-    doc.rect(M+cNoW,y,cFecW,rH);
-    ['A','B','C','D'].forEach((l,i)=>{ doc.rect(M+cNoW+cFecW+i*cDW,y,cDW,rH); });
-    ['A','B','C'].forEach((l,i)=>{ doc.rect(M+cNoW+cFecW+cDW*4+i*cRW,y,cRW,rH); });
-    ['A','B'].forEach((l,i)=>{ doc.rect(M+cNoW+cFecW+cDW*4+cRW*3+i*cRCW,y,cRCW,rH); });
-    doc.rect(M+cNoW+cFecW+cDW*4+cRW*3+cRCW*2,y,cFirmaW,rH);
-    doc.rect(M+cNoW+cFecW+cDW*4+cRW*3+cRCW*2+cFirmaW,y,cFirmaW,rH);
-    doc.rect(M+cNoW+cFecW+cDW*4+cRW*3+cRCW*2+cFirmaW*2,y,12,rH);
-    row++; y+=rH;
+    pdf.rect(M,y,cNo,rH);pdf.text(String(row),M+cNo/2,y+4,{align:'center'});
+    pdf.rect(M+cNo,y,cFec,rH);
+    ['A','B','C','D'].forEach((l,i)=>pdf.rect(M+cNo+cFec+i*cD,y,cD,rH));
+    ['A','B','C'].forEach((l,i)=>pdf.rect(M+cNo+cFec+cD*4+i*cR,y,cR,rH));
+    ['A','B'].forEach((l,i)=>pdf.rect(M+cNo+cFec+cD*4+cR*3+i*cRC,y,cRC,rH));
+    pdf.rect(M+cNo+cFec+cD*4+cR*3+cRC*2,y,fW,rH);pdf.rect(M+cNo+cFec+cD*4+cR*3+cRC*2+fW,y,fW,rH);pdf.rect(M+cNo+cFec+cD*4+cR*3+cRC*2+fW*2,y,12,rH);
+    row++;y+=rH;
   }
-  // Total
-  doc.setFont('helvetica','bold');
-  doc.rect(M,y,cNoW+cFecW,rH); ct('18. Total',M,y+4,cNoW+cFecW);
-  ['A','B','C','D'].forEach((l,i)=>{ doc.rect(M+cNoW+cFecW+i*cDW,y,cDW,rH); if(totC[l]) ct(String(totC[l]),M+cNoW+cFecW+i*cDW,y+4,cDW); });
-  ['A','B','C'].forEach((l,i)=>{ doc.rect(M+cNoW+cFecW+cDW*4+i*cRW,y,cRW,rH); if(totR[l]) ct(String(totR[l]),M+cNoW+cFecW+cDW*4+i*cRW,y+4,cRW); });
-  ['A','B'].forEach((l,i)=>{ doc.rect(M+cNoW+cFecW+cDW*4+cRW*3+i*cRCW,y,cRCW,rH); if(totRC[l]) ct(String(totRC[l]),M+cNoW+cFecW+cDW*4+cRW*3+i*cRCW,y+4,cRCW); });
-  doc.rect(M+cNoW+cFecW+cDW*4+cRW*3+cRCW*2,y,cFirmaW,rH);
-  doc.rect(M+cNoW+cFecW+cDW*4+cRW*3+cRCW*2+cFirmaW,y,cFirmaW,rH);
-  doc.rect(M+cNoW+cFecW+cDW*4+cRW*3+cRCW*2+cFirmaW*2,y,12,rH);
+  pdf.setFont('helvetica','bold');
+  pdf.rect(M,y,cNo+cFec,rH);pdf.text('18. Total',M+(cNo+cFec)/2,y+4,{align:'center'});
+  ['A','B','C','D'].forEach((l,i)=>{pdf.rect(M+cNo+cFec+i*cD,y,cD,rH);if(tC[l])pdf.text(String(tC[l]),M+cNo+cFec+i*cD+cD/2,y+4,{align:'center'});});
+  ['A','B','C'].forEach((l,i)=>{pdf.rect(M+cNo+cFec+cD*4+i*cR,y,cR,rH);if(tR[l])pdf.text(String(tR[l]),M+cNo+cFec+cD*4+i*cR+cR/2,y+4,{align:'center'});});
+  ['A','B'].forEach((l,i)=>{pdf.rect(M+cNo+cFec+cD*4+cR*3+i*cRC,y,cRC,rH);if(tRC[l])pdf.text(String(tRC[l]),M+cNo+cFec+cD*4+cR*3+i*cRC+cRC/2,y+4,{align:'center'});});
+  pdf.rect(M+cNo+cFec+cD*4+cR*3+cRC*2,y,fW,rH);pdf.rect(M+cNo+cFec+cD*4+cR*3+cRC*2+fW,y,fW,rH);pdf.rect(M+cNo+cFec+cD*4+cR*3+cRC*2+fW*2,y,12,rH);
   y+=rH+8;
-  doc.setFont('helvetica','normal'); doc.setFontSize(8);
-  doc.text('Nombre, firma y sello del Director del C. E. ___________________________',M,y);
+  pdf.setFont('helvetica','normal');pdf.setFontSize(8);
+  pdf.text('Nombre, firma y sello del Director del C. E. ___________________________',M,y);
 }
 
-// ── INF 002 ──
-function renderInf002(c){
+// ════════════════════════════════════
+//  INSTRUMENTO 002  (solo sección guía del docente)
+// ════════════════════════════════════
+function inf002(c){
+  const canSecs = U.rol==='admin' ? SECS : (MY_GUIA?[MY_GUIA]:[]);
+  if(!canSecs.length){
+    c.innerHTML=`<div style="text-align:center;padding:60px 20px;color:var(--mu)"><div style="font-size:44px">🔒</div><p style="margin-top:10px">Solo puedes generar el Instrumento 002 de tu sección guía.</p><p style="margin-top:6px;font-size:11px">Contacta al director para que te asigne una sección guía.</p></div>`;
+    return;
+  }
   c.innerHTML=`
   <div style="max-width:700px">
     <div class="card">
       <div class="ch"><span class="ct">📊 Instrumento No. 002 — Consolidado Mensual por Docente</span></div>
       <div class="cb">
-        <p style="font-size:11px;color:var(--mu);margin-bottom:16px;line-height:1.7">Genera el Registro Consolidado Mensual oficial de deméritos, redenciones y reconocimientos por sección (MINEDUCYT).</p>
+        <p style="font-size:11px;color:var(--mu);margin-bottom:14px;line-height:1.8">Registro Consolidado Mensual de Deméritos/Redenciones/Reconocimientos según Instrumento No. 002 MINEDUCYT.<br>${U.rol!=='admin'?`<strong style="color:var(--ac2)">Solo puedes generar el consolidado de tu sección guía: ${MY_GUIA?.nombre||'—'}</strong>`:''}</p>
         <div class="r3">
-          <div class="fg"><label class="fl">Sección / Grado</label><select class="fc" id="i2-sec">${secOpts(false,'Seleccionar...')}</select></div>
-          <div class="fg"><label class="fl">Turno</label><select class="fc" id="i2-turno"><option>Matutino</option><option>Vespertino</option><option>Nocturno</option></select></div>
-          <div class="fg"><label class="fl">Año</label><input class="fc" id="i2-anio" value="2025"></div>
+          <div class="fg"><label class="fl">Sección</label><select class="fc" id="i2-s">${canSecs.map(s=>`<option value="${s.id}">${s.nombre} — ${s.grado}</option>`).join('')}</select></div>
+          <div class="fg"><label class="fl">Turno</label><select class="fc" id="i2-t"><option>Matutino</option><option>Vespertino</option><option>Nocturno</option></select></div>
+          <div class="fg"><label class="fl">Año</label><input class="fc" id="i2-y" value="2025"></div>
         </div>
-        <div id="i2-prev" style="margin:14px 0"></div>
+        <div id="i2-prev" style="margin:12px 0"></div>
         <div style="display:flex;gap:8px">
-          <button class="btn bp" onclick="prevInf002()" style="flex:1;padding:10px">👁️ Vista Previa</button>
-          <button class="btn bsc" onclick="genInf002()" style="flex:1;padding:10px">📄 Exportar PDF</button>
+          <button class="btn bp" onclick="prevI2()" style="flex:1;padding:10px">👁️ Vista Previa</button>
+          <button class="btn bsu" onclick="genI002()" style="flex:1;padding:10px">📄 Exportar PDF</button>
         </div>
       </div>
     </div>
   </div>`;
+  if(U.rol!=='admin'&&MY_GUIA) document.getElementById('i2-t').value=MY_GUIA.turno||'Matutino';
 }
-
-function getI2Data(sid){
-  const sec=SECCIONES.find(s=>s.id===sid);
-  const doc2=DOCENTES.find(d=>d.id===sec?.docenteId);
-  const alums=ALUMNOS.filter(a=>a.seccionId===sid);
-  const getA=id=>ALUMNOS.find(a=>a.id===id);
+function getI2(sid){
+  const sec=SECS.find(s=>s.id===sid);
+  const doc2=DOCS.find(d=>d.id===sec?.docenteId);
+  const als=ALUMS.filter(a=>a.seccionId===sid);
+  const gA=id=>ALUMS.find(a=>a.id===id);
   const rows=[];
   for(let m=1;m<=11;m++){
     const ms=String(m).padStart(2,'0');
-    const rs=REGISTROS.filter(r=>alums.some(a=>a.id===r.alumnoId)&&r.fecha?.split('-')[1]===ms);
+    const rs=REGS.filter(r=>als.some(a=>a.id===r.alumnoId)&&r.fecha?.split('-')[1]===ms);
     const d=rs.filter(r=>r.tipo==='demerito');
     const re=rs.filter(r=>r.tipo==='redencion');
     const rc=rs.filter(r=>r.tipo==='reconocimiento');
-    rows.push({mes:meses[m],
-      matM:alums.filter(a=>a.sexo==='M').length,matH:alums.filter(a=>a.sexo==='H').length,matT:alums.length,
-      dM:d.filter(r=>getA(r.alumnoId)?.sexo==='M').length,dH:d.filter(r=>getA(r.alumnoId)?.sexo==='H').length,dT:d.length,
+    rows.push({mes:MES[m],
+      matM:als.filter(a=>a.sexo==='M').length,matH:als.filter(a=>a.sexo==='H').length,matT:als.length,
+      dM:d.filter(r=>gA(r.alumnoId)?.sexo==='M').length,dH:d.filter(r=>gA(r.alumnoId)?.sexo==='H').length,dT:d.length,
       dA:d.filter(r=>r.causalLetra==='A').length,dB:d.filter(r=>r.causalLetra==='B').length,dC:d.filter(r=>r.causalLetra==='C').length,dD:d.filter(r=>r.causalLetra==='D').length,
-      rM:re.filter(r=>getA(r.alumnoId)?.sexo==='M').length,rH:re.filter(r=>getA(r.alumnoId)?.sexo==='H').length,rT:re.length,
+      rM:re.filter(r=>gA(r.alumnoId)?.sexo==='M').length,rH:re.filter(r=>gA(r.alumnoId)?.sexo==='H').length,rT:re.length,
       rA:re.filter(r=>r.causalLetra==='A').length,rB:re.filter(r=>r.causalLetra==='B').length,rC:re.filter(r=>r.causalLetra==='C').length,
-      rcM:rc.filter(r=>getA(r.alumnoId)?.sexo==='M').length,rcH:rc.filter(r=>getA(r.alumnoId)?.sexo==='H').length,rcT:rc.length,
+      rcM:rc.filter(r=>gA(r.alumnoId)?.sexo==='M').length,rcH:rc.filter(r=>gA(r.alumnoId)?.sexo==='H').length,rcT:rc.length,
     });
   }
-  return {sec,doc2,alums,rows};
+  return {sec,doc2,als,rows};
 }
-
-function prevInf002(){
-  const sid=document.getElementById('i2-sec')?.value;
-  if(!sid){ toast('Selecciona una sección','error'); return; }
-  const {sec,doc2,alums,rows}=getI2Data(sid);
-  const tot=rows.reduce((t,r)=>{ Object.keys(r).forEach(k=>{ if(k!=='mes'&&typeof r[k]==='number') t[k]=(t[k]||0)+r[k]; }); return t; },{});
+function prevI2(){
+  const sid=document.getElementById('i2-s')?.value; if(!sid){toast('Selecciona sección','error');return;}
+  const {sec,doc2,als,rows}=getI2(sid);
+  const tot=rows.reduce((t,r)=>{Object.keys(r).forEach(k=>{if(k!=='mes'&&typeof r[k]==='number') t[k]=(t[k]||0)+r[k];});return t;},{});
   document.getElementById('i2-prev').innerHTML=`
-    <div style="background:var(--bg);border-radius:8px;padding:12px;margin-bottom:10px;font-size:10px;color:var(--mu)">
-      Sección: <strong style="color:var(--tx)">${sec?.nombre}</strong> · Grado: <strong style="color:var(--tx)">${sec?.grado}</strong> · Docente: <strong style="color:var(--tx)">${doc2?.nombre||'—'}</strong> · Alumnos: <strong style="color:var(--tx)">${alums.length} (${alums.filter(a=>a.sexo==='M').length}M/${alums.filter(a=>a.sexo==='H').length}H)</strong>
+    <div style="background:var(--bg);border-radius:8px;padding:10px 12px;margin-bottom:9px;font-size:10px;color:var(--mu)">
+      Sección: <b style="color:var(--tx)">${sec?.nombre}</b> · Docente Guía: <b style="color:var(--tx)">${doc2?.nombre||'—'}</b> · Alumnos: <b style="color:var(--tx)">${als.length} (${als.filter(a=>a.sexo==='M').length}M/${als.filter(a=>a.sexo==='H').length}H)</b>
     </div>
-    <div class="tw" style="font-size:9px"><table style="min-width:600px"><thead>
-      <tr><th>Mes</th><th colspan="3">Matrícula</th><th colspan="3">Deméritos</th><th colspan="4">Causales A/B/C/D</th><th colspan="3">Redenciones</th><th colspan="3">Opción A/B/C</th><th colspan="3">Reconocimientos</th></tr>
+    <div class="tw" style="font-size:9px"><table style="min-width:580px"><thead>
+      <tr><th>Mes</th><th colspan="3">Matrícula</th><th colspan="3">Dem.</th><th colspan="4">A/B/C/D</th><th colspan="3">Red.</th><th colspan="3">Op.A/B/C</th><th colspan="3">Rec.</th></tr>
       <tr><th></th><th>M</th><th>H</th><th>T</th><th>M</th><th>H</th><th>T</th><th>A</th><th>B</th><th>C</th><th>D</th><th>M</th><th>H</th><th>T</th><th>A</th><th>B</th><th>C</th><th>M</th><th>H</th><th>T</th></tr>
     </thead><tbody>
       ${rows.map(r=>`<tr><td>${r.mes}</td><td>${r.matM}</td><td>${r.matH}</td><td><b>${r.matT}</b></td><td>${r.dM}</td><td>${r.dH}</td><td><b>${r.dT}</b></td><td>${r.dA}</td><td>${r.dB}</td><td>${r.dC}</td><td>${r.dD}</td><td>${r.rM}</td><td>${r.rH}</td><td><b>${r.rT}</b></td><td>${r.rA}</td><td>${r.rB}</td><td>${r.rC}</td><td>${r.rcM}</td><td>${r.rcH}</td><td><b>${r.rcT}</b></td></tr>`).join('')}
-      <tr style="background:rgba(37,99,235,.08);font-weight:700"><td>TOTAL</td><td>${tot.matM||0}</td><td>${tot.matH||0}</td><td>${tot.matT||0}</td><td>${tot.dM||0}</td><td>${tot.dH||0}</td><td>${tot.dT||0}</td><td>${tot.dA||0}</td><td>${tot.dB||0}</td><td>${tot.dC||0}</td><td>${tot.dD||0}</td><td>${tot.rM||0}</td><td>${tot.rH||0}</td><td>${tot.rT||0}</td><td>${tot.rA||0}</td><td>${tot.rB||0}</td><td>${tot.rC||0}</td><td>${tot.rcM||0}</td><td>${tot.rcH||0}</td><td>${tot.rcT||0}</td></tr>
+      <tr style="background:rgba(29,107,240,.08);font-weight:700"><td>TOTAL</td><td>${tot.matM||0}</td><td>${tot.matH||0}</td><td>${tot.matT||0}</td><td>${tot.dM||0}</td><td>${tot.dH||0}</td><td>${tot.dT||0}</td><td>${tot.dA||0}</td><td>${tot.dB||0}</td><td>${tot.dC||0}</td><td>${tot.dD||0}</td><td>${tot.rM||0}</td><td>${tot.rH||0}</td><td>${tot.rT||0}</td><td>${tot.rA||0}</td><td>${tot.rB||0}</td><td>${tot.rC||0}</td><td>${tot.rcM||0}</td><td>${tot.rcH||0}</td><td>${tot.rcT||0}</td></tr>
     </tbody></table></div>`;
   toast('Vista previa lista','success');
 }
-
-function genInf002(){
-  const sid=document.getElementById('i2-sec')?.value;
-  const turno=document.getElementById('i2-turno')?.value||'Matutino';
-  const anio=document.getElementById('i2-anio')?.value||'2025';
-  if(!sid){ toast('Selecciona una sección','error'); return; }
-  const {sec,doc2,alums,rows}=getI2Data(sid);
-  const { jsPDF } = window.jspdf;
-  const pdf=new jsPDF({ orientation:'landscape', unit:'mm', format:'letter' });
-  const W=279.4, M=10;
-
-  pdf.setFontSize(8); pdf.setFont('helvetica','bold');
-  pdf.text('MINISTERIO DE EDUCACIÓN, CIENCIA Y TECNOLOGÍA',W-M,8,{align:'right'});
-  pdf.setFontSize(12); pdf.text('Instrumento No. 002',W/2,16,{align:'center'});
-  pdf.setFontSize(10); pdf.text('Registro Consolidado Mensual de Deméritos/Redenciones/Reconocimientos (Docente)',W/2,22,{align:'center'});
-
-  let y=30;
-  const df2=(l,v,x,y2,ex)=>{pdf.setFontSize(8);pdf.setFont('helvetica','bold');pdf.text(l,x,y2);pdf.setFont('helvetica','normal');pdf.text(String(v||''),x+pdf.getTextWidth(l)+1,y2);pdf.line(x+pdf.getTextWidth(l)+1,y2+0.4,ex,y2+0.4);};
-  df2('1. Nombre del Centro Educativo: ',CE.nombre||'',M,y,165);
-  df2('2. Código del C.E.: ',CE.codigo||'',167,y,210);
-  y+=5.5;
-  df2('3. Departamento del C.E.: ',CE.depto||'',M,y,80);
-  df2('4. Municipio: ',CE.muni||'',82,y,152);
-  df2('5. Distrito: ',CE.dist||'',154,y,212);
-  y+=5.5;
-  df2('6. Nombre del docente: ',doc2?.nombre||'',M,y,175);
-  df2('7. Mes/Año: ','Ene-Nov/'+anio,177,y,228);
-  y+=5.5;
-  df2('8. Grado: ',sec?.grado||'',M,y,90);
-  df2('9. Sección: ',sec?.nombre||'',92,y,142);
-  df2('10. Turno: ',turno,144,y,188);
-  y+=7;
-
-  const rH=6.2;
+function genI002(){
+  const sid=document.getElementById('i2-s')?.value; const turno=document.getElementById('i2-t')?.value||'Matutino'; const anio=document.getElementById('i2-y')?.value||'2025';
+  if(!sid){toast('Selecciona sección','error');return;}
+  const {sec,doc2,als,rows}=getI2(sid);
+  const {jsPDF}=window.jspdf;
+  const pdf=new jsPDF({orientation:'landscape',unit:'mm',format:'letter'});
+  const W=279.4,M=10,rH=6.4;
+  pdf.setFontSize(8);pdf.setFont('helvetica','bold');pdf.text('MINISTERIO DE EDUCACIÓN, CIENCIA Y TECNOLOGÍA',W-M,8,{align:'right'});
+  pdf.setFontSize(12);pdf.text('Instrumento No. 002',W/2,15,{align:'center'});
+  pdf.setFontSize(10);pdf.text('Registro Consolidado Mensual de Deméritos/Redenciones/Reconocimientos (Docente)',W/2,21,{align:'center'});
+  let y=29;
+  const df2=(l,v,x,y2,ex)=>{pdf.setFontSize(8);pdf.setFont('helvetica','bold');pdf.text(l,x,y2);pdf.setFont('helvetica','normal');pdf.text(String(v||''),x+pdf.getTextWidth(l)+1,y2);pdf.line(x+pdf.getTextWidth(l)+1,y2+.4,ex,y2+.4);};
+  df2('1. Nombre del Centro Educativo: ',CE.nombre||'',M,y,165);df2('2. Código: ',CE.codigo||'',167,y,210);y+=5.5;
+  df2('3. Departamento: ',CE.depto||'',M,y,80);df2('4. Municipio: ',CE.muni||'',82,y,152);df2('5. Distrito: ',CE.dist||'',154,y,212);y+=5.5;
+  df2('6. Docente: ',doc2?.nombre||'',M,y,175);df2('7. Mes/Año: ','Ene-Nov/'+anio,177,y,228);y+=5.5;
+  df2('8. Grado: ',sec?.grado||'',M,y,90);df2('9. Sección: ',sec?.nombre||'',92,y,142);df2('10. Turno: ',turno,144,y,188);y+=7;
   const g=[18,19.5,19.5,26,19.5,19.5,19.5];
-  const gx=[M];
-  for(let i=0;i<g.length-1;i++) gx.push(gx[gx.length-1]+g[i]);
-
-  g.forEach((w,i)=>{ pdf.rect(gx[i],y,w,rH); });
-  const ctP=(t,x,w)=>pdf.text(t,x+w/2,y+4,{align:'center'});
-  pdf.setFontSize(7); pdf.setFont('helvetica','bold');
-  ctP('11. Mes',gx[0],g[0]);
-  ctP('12. Matrícula',gx[1],g[1]);
-  ctP('13. Deméritos x Sexo',gx[2],g[2]);
-  ctP('14. Deméritos x Causales',gx[3],g[3]);
-  ctP('15. Redenciones x Sexo',gx[4],g[4]);
-  ctP('16. Redenciones x Opción',gx[5],g[5]);
-  ctP('17. Reconocimientos',gx[6],g[6]);
+  const gx=[M];for(let i=0;i<g.length-1;i++) gx.push(gx[gx.length-1]+g[i]);
+  g.forEach((w,i)=>pdf.rect(gx[i],y,w,rH));
+  const cp=(t,x,w)=>pdf.text(t,x+w/2,y+4,{align:'center'});
+  pdf.setFontSize(7);pdf.setFont('helvetica','bold');
+  cp('11. Mes',gx[0],g[0]);cp('12. Matrícula',gx[1],g[1]);cp('13. Dem. x Sexo',gx[2],g[2]);cp('14. Dem. x Causales',gx[3],g[3]);cp('15. Red. x Sexo',gx[4],g[4]);cp('16. Red. x Opción',gx[5],g[5]);cp('17. Reconocimientos',gx[6],g[6]);
   y+=rH;
-
-  const subH=(grp,x,w,labels)=>{ const cw=w/labels.length; labels.forEach((l,i)=>{ pdf.rect(x+i*cw,y,cw,rH); pdf.text(l,x+i*cw+cw/2,y+4,{align:'center'}); }); };
-  pdf.rect(gx[0],y,g[0],rH); ctP('',gx[0],g[0]);
-  subH(0,gx[1],g[1],['M','H','T']);
-  subH(1,gx[2],g[2],['M','H','T']);
-  subH(2,gx[3],g[3],['A','B','C','D','T']);
-  subH(3,gx[4],g[4],['M','H','T']);
-  subH(4,gx[5],g[5],['A','B','C','T']);
-  subH(5,gx[6],g[6],['M','H','T']);
+  const sh=(x,w,lbs)=>{const cw=w/lbs.length;lbs.forEach((l,i)=>{pdf.rect(x+i*cw,y,cw,rH);pdf.text(l,x+i*cw+cw/2,y+4,{align:'center'});});};
+  pdf.rect(gx[0],y,g[0],rH);sh(gx[1],g[1],['M','H','T']);sh(gx[2],g[2],['M','H','T']);sh(gx[3],g[3],['A','B','C','D','T']);sh(gx[4],g[4],['M','H','T']);sh(gx[5],g[5],['A','B','C','T']);sh(gx[6],g[6],['M','H','T']);
   y+=rH;
-
   pdf.setFont('helvetica','normal');
-  const tot2={matM:0,matH:0,dM:0,dH:0,dT:0,dA:0,dB:0,dC:0,dD:0,rM:0,rH:0,rT:0,rA:0,rB:0,rC:0,rcM:0,rcH:0,rcT:0};
+  const tot2={};
   rows.forEach(r=>{
-    pdf.rect(gx[0],y,g[0],rH); ctP(r.mes,gx[0],g[0]);
-    const w1=g[1]/3; [r.matM,r.matH,r.matT].forEach((v,i)=>{ pdf.rect(gx[1]+i*w1,y,w1,rH); if(v) ctP(String(v),gx[1]+i*w1,w1); });
-    const w2=g[2]/3; [r.dM,r.dH,r.dT].forEach((v,i)=>{ pdf.rect(gx[2]+i*w2,y,w2,rH); if(v) ctP(String(v),gx[2]+i*w2,w2); });
-    const w3=g[3]/5; [r.dA,r.dB,r.dC,r.dD,r.dT].forEach((v,i)=>{ pdf.rect(gx[3]+i*w3,y,w3,rH); if(v) ctP(String(v),gx[3]+i*w3,w3); });
-    const w4=g[4]/3; [r.rM,r.rH,r.rT].forEach((v,i)=>{ pdf.rect(gx[4]+i*w4,y,w4,rH); if(v) ctP(String(v),gx[4]+i*w4,w4); });
-    const w5=g[5]/4; [r.rA,r.rB,r.rC,r.rT].forEach((v,i)=>{ pdf.rect(gx[5]+i*w5,y,w5,rH); if(v) ctP(String(v),gx[5]+i*w5,w5); });
-    const w6=g[6]/3; [r.rcM,r.rcH,r.rcT].forEach((v,i)=>{ pdf.rect(gx[6]+i*w6,y,w6,rH); if(v) ctP(String(v),gx[6]+i*w6,w6); });
-    Object.keys(tot2).forEach(k=>{ if(r[k]) tot2[k]+=r[k]; });
+    pdf.rect(gx[0],y,g[0],rH);cp(r.mes,gx[0],g[0]);
+    const w1=g[1]/3;[r.matM,r.matH,r.matT].forEach((v,i)=>{pdf.rect(gx[1]+i*w1,y,w1,rH);if(v)cp(String(v),gx[1]+i*w1,w1);});
+    const w2=g[2]/3;[r.dM,r.dH,r.dT].forEach((v,i)=>{pdf.rect(gx[2]+i*w2,y,w2,rH);if(v)cp(String(v),gx[2]+i*w2,w2);});
+    const w3=g[3]/5;[r.dA,r.dB,r.dC,r.dD,r.dT].forEach((v,i)=>{pdf.rect(gx[3]+i*w3,y,w3,rH);if(v)cp(String(v),gx[3]+i*w3,w3);});
+    const w4=g[4]/3;[r.rM,r.rH,r.rT].forEach((v,i)=>{pdf.rect(gx[4]+i*w4,y,w4,rH);if(v)cp(String(v),gx[4]+i*w4,w4);});
+    const w5=g[5]/4;[r.rA,r.rB,r.rC,r.rT].forEach((v,i)=>{pdf.rect(gx[5]+i*w5,y,w5,rH);if(v)cp(String(v),gx[5]+i*w5,w5);});
+    const w6=g[6]/3;[r.rcM,r.rcH,r.rcT].forEach((v,i)=>{pdf.rect(gx[6]+i*w6,y,w6,rH);if(v)cp(String(v),gx[6]+i*w6,w6);});
+    Object.keys(r).forEach(k=>{if(k!=='mes'&&typeof r[k]==='number') tot2[k]=(tot2[k]||0)+r[k];});
     y+=rH;
   });
   pdf.setFont('helvetica','bold');
-  pdf.rect(gx[0],y,g[0],rH); ctP('18. Total',gx[0],g[0]);
-  const tw1=g[1]/3;[tot2.matM,tot2.matH,tot2.matM+tot2.matH].forEach((v,i)=>{pdf.rect(gx[1]+i*tw1,y,tw1,rH);if(v)ctP(String(v),gx[1]+i*tw1,tw1);});
-  const tw2=g[2]/3;[tot2.dM,tot2.dH,tot2.dT].forEach((v,i)=>{pdf.rect(gx[2]+i*tw2,y,tw2,rH);if(v)ctP(String(v),gx[2]+i*tw2,tw2);});
-  const tw3=g[3]/5;[tot2.dA,tot2.dB,tot2.dC,tot2.dD,tot2.dT].forEach((v,i)=>{pdf.rect(gx[3]+i*tw3,y,tw3,rH);if(v)ctP(String(v),gx[3]+i*tw3,tw3);});
-  const tw4=g[4]/3;[tot2.rM,tot2.rH,tot2.rT].forEach((v,i)=>{pdf.rect(gx[4]+i*tw4,y,tw4,rH);if(v)ctP(String(v),gx[4]+i*tw4,tw4);});
-  const tw5=g[5]/4;[tot2.rA,tot2.rB,tot2.rC,tot2.rT].forEach((v,i)=>{pdf.rect(gx[5]+i*tw5,y,tw5,rH);if(v)ctP(String(v),gx[5]+i*tw5,tw5);});
-  const tw6=g[6]/3;[tot2.rcM,tot2.rcH,tot2.rcT].forEach((v,i)=>{pdf.rect(gx[6]+i*tw6,y,tw6,rH);if(v)ctP(String(v),gx[6]+i*tw6,tw6);});
-  y+=rH+8;
-  pdf.setFont('helvetica','normal'); pdf.setFontSize(8);
+  pdf.rect(gx[0],y,g[0],rH);cp('18. Total',gx[0],g[0]);
+  const tw1=g[1]/3;[tot2.matM,tot2.matH,tot2.matM+tot2.matH].forEach((v,i)=>{pdf.rect(gx[1]+i*tw1,y,tw1,rH);if(v)cp(String(v),gx[1]+i*tw1,tw1);});
+  const tw2=g[2]/3;[tot2.dM,tot2.dH,tot2.dT].forEach((v,i)=>{pdf.rect(gx[2]+i*tw2,y,tw2,rH);if(v)cp(String(v),gx[2]+i*tw2,tw2);});
+  const tw3=g[3]/5;[tot2.dA,tot2.dB,tot2.dC,tot2.dD,tot2.dT].forEach((v,i)=>{pdf.rect(gx[3]+i*tw3,y,tw3,rH);if(v)cp(String(v),gx[3]+i*tw3,tw3);});
+  const tw4=g[4]/3;[tot2.rM,tot2.rH,tot2.rT].forEach((v,i)=>{pdf.rect(gx[4]+i*tw4,y,tw4,rH);if(v)cp(String(v),gx[4]+i*tw4,tw4);});
+  const tw5=g[5]/4;[tot2.rA,tot2.rB,tot2.rC,tot2.rT].forEach((v,i)=>{pdf.rect(gx[5]+i*tw5,y,tw5,rH);if(v)cp(String(v),gx[5]+i*tw5,tw5);});
+  const tw6=g[6]/3;[tot2.rcM,tot2.rcH,tot2.rcT].forEach((v,i)=>{pdf.rect(gx[6]+i*tw6,y,tw6,rH);if(v)cp(String(v),gx[6]+i*tw6,tw6);});
+  y+=rH+9;
+  pdf.setFont('helvetica','normal');pdf.setFontSize(8);
   pdf.text('Nombre, firma y sello del Director del C. E. ___________________________',M,y);
   pdf.save(`Instrumento002_${sec?.nombre||'Sec'}_${anio}.pdf`);
   toast('✅ PDF Instrumento 002 generado','success');
 }
 
-// ══════════════════════════════════════════════════════
+// ════════════════════════════════════
 //  HONORES
-// ══════════════════════════════════════════════════════
-function renderHonores(c){
-  const con0=alumsInMyScope().filter(a=>a.demeritos===0);
+// ════════════════════════════════════
+function honores(c){
+  const con0=myAlums().filter(a=>!a.demeritos);
   c.innerHTML=`
   <div class="sg">
-    <div class="sc sco"><div class="sc-em">🏆</div><div class="sc-v">${con0.length}</div><div class="sc-l">Con mención honorífica</div></div>
-    <div class="sc scg"><div class="sc-em">📊</div><div class="sc-v">${alumsInMyScope().length?Math.round(con0.length/alumsInMyScope().length*100):0}%</div><div class="sc-l">Del total de alumnos</div></div>
-    <div class="sc scp"><div class="sc-em">🎓</div><div class="sc-v">${REGISTROS.filter(r=>r.tipo==='reconocimiento').length}</div><div class="sc-l">Reconocimientos totales</div></div>
+    <div class="sc sco"><div class="sc-e">🏆</div><div class="sc-v">${con0.length}</div><div class="sc-l">Menciones honoríficas</div></div>
+    <div class="sc scg"><div class="sc-e">📊</div><div class="sc-v">${myAlums().length?Math.round(con0.length/myAlums().length*100):0}%</div><div class="sc-l">Del total</div></div>
+    <div class="sc scp"><div class="sc-e">🎓</div><div class="sc-v">${REGS.filter(r=>r.tipo==='reconocimiento').length}</div><div class="sc-l">Reconocimientos</div></div>
   </div>
   <div class="card">
-    <div class="ch"><span class="ct">🌟 Menciones Honoríficas — Artículo 7</span></div>
+    <div class="ch"><span class="ct">🌟 Menciones Honoríficas — Art. 7</span></div>
     <div class="cb">
-      <p style="font-size:11px;color:var(--mu);margin-bottom:16px">Alumnos con <strong style="color:#fbbf24">cero deméritos</strong> al cierre del mes, candidatos a Mención Honorífica de Cortesía Escolar.</p>
-      <div class="hg">${con0.length?con0.map(a=>{ const s=SECCIONES.find(sc=>sc.id===a.seccionId); return `<div class="hc">${avHtml(a.nombre,44)}<div style="font-size:12px;font-weight:700;margin-top:8px">${a.nombre}</div><div style="font-size:10px;color:var(--mu);margin-top:2px">${s?.nombre||'—'} · ${a.grado}</div><div style="margin-top:8px"><span class="bx bxgold">⭐ Mención Honorífica</span></div></div>`; }).join(''):'<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--mu)">Aún no hay alumnos con cero deméritos</div>'}</div>
+      <p style="font-size:11px;color:var(--mu);margin-bottom:14px">Alumnos con <strong style="color:#fbbf24">cero deméritos</strong> — candidatos a Mención Honorífica de Cortesía Escolar.</p>
+      <div class="hg">${con0.length?con0.map(a=>{const s=SECS.find(sc=>sc.id===a.seccionId);return `<div class="hc">${av(a.nombre,42)}<div style="font-size:12px;font-weight:700;margin-top:7px">${a.nombre}</div><div style="font-size:10px;color:var(--mu);margin-top:2px">${s?.nombre||'—'} · ${a.grado}</div><div style="margin-top:7px"><span class="bx bxgo">⭐ Mención Honorífica</span></div></div>`;}).join(''):'<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--mu)">Sin alumnos con cero deméritos</div>'}</div>
     </div>
   </div>`;
 }
 
-// ══════════════════════════════════════════════════════
-//  DOCENTES (admin only)
-// ══════════════════════════════════════════════════════
-function renderDocentes(c){
+// ════════════════════════════════════
+//  DOCENTES / SECCIONES / CONFIG (admin)
+// ════════════════════════════════════
+function docentes(c){
   c.innerHTML=`
   <div class="card">
-    <div class="ch"><span class="ct">👩‍🏫 Docentes Guías</span><button class="btn bp bsm" onclick="openModal('mo-docente')">+ Agregar</button></div>
-    <div class="tw"><table><thead><tr><th>Docente</th><th>Correo</th><th>Especialidad</th><th>Secciones Asignadas</th><th>Alumnos</th></tr></thead><tbody>
-      ${DOCENTES.map(d=>{
-        const secs=SECCIONES.filter(s=>(d.seccionesIds||[]).includes(s.id)||s.docenteId===d.id);
-        const alums=ALUMNOS.filter(a=>secs.some(s=>s.id===a.seccionId));
+    <div class="ch"><span class="ct">👩‍🏫 Docentes Guías</span><button class="btn bp bsm" onclick="om('mo-doc')">+ Agregar</button></div>
+    <div class="tw"><table><thead><tr><th>Docente</th><th>Correo</th><th>Especialidad</th><th>Sección Guía</th><th>Imparte en</th><th>Alumnos</th></tr></thead><tbody>
+      ${DOCS.map(d=>{
+        const sg=SECS.find(s=>s.id===d.secGuiaId);
+        const si=SECS.filter(s=>(d.secsImparte||[]).includes(s.id));
+        const als=ALUMS.filter(a=>[...(d.secsImparte||[]),d.secGuiaId].includes(a.seccionId));
         return `<tr>
-          <td><div style="display:flex;align-items:center;gap:7px">${avHtml(d.nombre)}<div><div style="font-weight:600">${d.nombre}</div></div></div></td>
+          <td><div style="display:flex;align-items:center;gap:7px">${av(d.nombre)}<div style="font-weight:600">${d.nombre}</div></div></td>
           <td style="font-size:10px;color:var(--ac2)">${d.email||'—'}</td>
           <td style="font-size:10px;color:var(--mu)">${d.especialidad||'—'}</td>
-          <td>${secs.map(s=>`<span class="sp" style="margin-right:3px">${s.nombre}</span>`).join('')||'<span style="color:var(--mu);font-size:10px">Sin asignar</span>'}</td>
-          <td style="font-family:var(--mo)">${alums.length}</td>
+          <td>${sg?`<span class="sp" style="background:rgba(29,107,240,.2);color:var(--ac)">${sg.nombre}</span>`:'<span style="color:var(--mu);font-size:10px">—</span>'}</td>
+          <td>${si.map(s=>`<span class="sp" style="margin-right:3px">${s.nombre}</span>`).join('')||'—'}</td>
+          <td style="font-family:var(--mo)">${als.length}</td>
         </tr>`;
-      }).join('')||'<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--mu)">Sin docentes</td></tr>'}
+      }).join('')||'<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--mu)">Sin docentes</td></tr>'}
     </tbody></table></div>
   </div>`;
 }
-
-async function guardarDocente(){
-  const nombre=document.getElementById('mdoc-nombre')?.value.trim();
-  const email=document.getElementById('mdoc-correo')?.value.trim();
-  const esp=document.getElementById('mdoc-esp')?.value.trim();
-  const secEl=document.getElementById('mdoc-secs');
-  const sids=secEl?Array.from(secEl.selectedOptions).map(o=>o.value):[];
-  if(!nombre){ toast('Ingresa el nombre','error'); return; }
-  showLoading('Guardando...');
-  // Check if exists
-  const existing=DOCENTES.find(d=>d.email===email);
-  if(existing){
-    await db.collection('docentes').doc(existing.id).update({nombre,especialidad:esp,seccionesIds:sids});
-  } else {
-    await db.collection('docentes').add({nombre,email,especialidad:esp,seccionesIds:sids,creadoEn:new Date().toISOString()});
-  }
-  // Update section docenteId
-  for(const sid of sids){ await db.collection('secciones').doc(sid).update({docenteId:existing?.id||''}); }
-  await loadAllData();
-  hideLoading(); closeModal('mo-docente');
-  toast(`Docente guardado: ${nombre}`,'success');
-  renderView('docentes');
+async function saveDocente(){
+  const nombre=document.getElementById('md-n')?.value.trim();
+  const email=document.getElementById('md-e')?.value.trim();
+  const esp=document.getElementById('md-esp')?.value.trim();
+  const sg=document.getElementById('md-sg')?.value||'';
+  const ssEl=document.getElementById('md-ss');
+  const si=ssEl?Array.from(ssEl.selectedOptions).map(o=>o.value):[];
+  if(!nombre){toast('Ingresa el nombre','error');return;}
+  showLoad('Guardando...');
+  const ex=DOCS.find(d=>d.email===email);
+  if(ex) await db.collection('docentes').doc(ex.id).update({nombre,especialidad:esp,secGuiaId:sg,secsImparte:si});
+  else await db.collection('docentes').add({nombre,email,especialidad:esp,secGuiaId:sg,secsImparte:si,creadoEn:new Date().toISOString()});
+  if(sg) await db.collection('secciones').doc(sg).update({docenteId:ex?.id||''});
+  await loadAll(); hideLoad(); cm('mo-doc');
+  toast(`Docente guardado: ${nombre}`,'success'); docentes(document.getElementById('content'));
 }
-
-// ══════════════════════════════════════════════════════
-//  SECCIONES (admin only)
-// ══════════════════════════════════════════════════════
-function renderSecciones(c){
+function secciones(c){
   c.innerHTML=`
   <div class="card">
-    <div class="ch"><span class="ct">🏫 Secciones y Grados</span><button class="btn bp bsm" onclick="openModal('mo-seccion')">+ Nueva</button></div>
+    <div class="ch"><span class="ct">🏫 Secciones y Grados</span><button class="btn bp bsm" onclick="om('mo-sec')">+ Nueva</button></div>
     <div class="tw"><table><thead><tr><th>Sección</th><th>Grado</th><th>Turno</th><th>Docente Guía</th><th>M</th><th>H</th><th>Total</th><th>Deméritos</th></tr></thead><tbody>
-      ${SECCIONES.map(sec=>{
-        const als=ALUMNOS.filter(a=>a.seccionId===sec.id);
-        const doc=DOCENTES.find(d=>d.id===sec.docenteId);
-        const dem=REGISTROS.filter(r=>als.some(a=>a.id===r.alumnoId)&&r.tipo==='demerito').length;
+      ${SECS.map(sec=>{
+        const als=ALUMS.filter(a=>a.seccionId===sec.id);
+        const doc=DOCS.find(d=>d.id===sec.docenteId);
+        const dem=REGS.filter(r=>als.some(a=>a.id===r.alumnoId)&&r.tipo==='demerito').length;
         return `<tr><td><span class="sp">${sec.nombre}</span></td><td style="font-size:10px">${sec.grado}</td>
-        <td><span class="bx ${sec.turno==='Matutino'?'bxb':'bxp'}">${sec.turno}</span></td>
+        <td><span class="bx ${sec.turno==='Matutino'?'bxb':'bxp'}">${sec.turno||'—'}</span></td>
         <td style="font-size:10px">${doc?.nombre||'—'}</td>
         <td style="font-family:var(--mo)">${als.filter(a=>a.sexo==='M').length}</td>
         <td style="font-family:var(--mo)">${als.filter(a=>a.sexo==='H').length}</td>
@@ -1620,92 +1652,47 @@ function renderSecciones(c){
     </tbody></table></div>
   </div>`;
 }
-
-async function guardarSeccion(){
-  const nombre=document.getElementById('msec-nombre')?.value.trim();
-  const grado=document.getElementById('msec-grado')?.value.trim();
-  const turno=document.getElementById('msec-turno')?.value;
-  const did=document.getElementById('msec-doc')?.value;
-  if(!nombre||!grado){ toast('Completa nombre y grado','error'); return; }
-  showLoading('Guardando...');
-  await db.collection('secciones').add({nombre,grado,turno,docenteId:did||'',creadoEn:new Date().toISOString()});
-  await loadAllData();
-  hideLoading(); closeModal('mo-seccion');
-  toast(`Sección creada: ${nombre}`,'success');
-  renderView('secciones');
+async function addSeccion(){
+  const n=document.getElementById('ms-n')?.value.trim(),gr=document.getElementById('ms-gr')?.value.trim(),t=document.getElementById('ms-t')?.value,did=document.getElementById('ms-d')?.value||'';
+  if(!n||!gr){toast('Completa nombre y grado','error');return;}
+  showLoad('Guardando...');
+  await db.collection('secciones').add({nombre:n,grado:gr,turno:t,docenteId:did,creadoEn:new Date().toISOString()});
+  await loadAll(); hideLoad(); cm('mo-sec');
+  toast(`Sección creada: ${n}`,'success'); secciones(document.getElementById('content'));
 }
-
-// ══════════════════════════════════════════════════════
-//  CONFIG
-// ══════════════════════════════════════════════════════
-function renderConfig(c){
+function config(c){
   c.innerHTML=`
-  <div style="max-width:560px">
+  <div style="max-width:540px">
     <div class="card">
       <div class="ch"><span class="ct">⚙️ Datos del Centro Educativo</span></div>
       <div class="cb">
-        <div class="r2">
-          <div class="fg"><label class="fl">Nombre del C.E.</label><input class="fc" id="cfg-nombre" value="${CE.nombre||''}" placeholder="Nombre completo"></div>
-          <div class="fg"><label class="fl">Código (5 dígitos)</label><input class="fc" id="cfg-codigo" value="${CE.codigo||''}" maxlength="5" placeholder="12345"></div>
-        </div>
-        <div class="r3">
-          <div class="fg"><label class="fl">Departamento</label><input class="fc" id="cfg-depto" value="${CE.depto||''}" placeholder="Ej: San Salvador"></div>
-          <div class="fg"><label class="fl">Municipio</label><input class="fc" id="cfg-muni" value="${CE.muni||''}" placeholder="Ej: Soyapango"></div>
-          <div class="fg"><label class="fl">Distrito</label><input class="fc" id="cfg-dist" value="${CE.dist||''}" placeholder="Ej: Ilopango"></div>
-        </div>
-        <div class="r2">
-          <div class="fg"><label class="fl">Turno Principal</label><select class="fc" id="cfg-turno"><option ${CE.turno==='Matutino'?'selected':''}>Matutino</option><option ${CE.turno==='Vespertino'?'selected':''}>Vespertino</option><option ${CE.turno==='Ambos'?'selected':''}>Ambos</option></select></div>
-          <div class="fg"><label class="fl">Director(a)</label><input class="fc" id="cfg-director" value="${CE.director||''}" placeholder="Nombre completo"></div>
-        </div>
-        <button class="btn bp" onclick="saveConfig()" style="width:100%;padding:11px">💾 Guardar Configuración</button>
+        <div class="r2"><div class="fg"><label class="fl">Nombre del C.E.</label><input class="fc" id="cfg-n" value="${CE.nombre||''}" placeholder="Nombre completo"></div><div class="fg"><label class="fl">Código (5 dígitos)</label><input class="fc" id="cfg-cod" value="${CE.codigo||''}" maxlength="5"></div></div>
+        <div class="r3"><div class="fg"><label class="fl">Departamento</label><input class="fc" id="cfg-dep" value="${CE.depto||''}"></div><div class="fg"><label class="fl">Municipio</label><input class="fc" id="cfg-mun" value="${CE.muni||''}"></div><div class="fg"><label class="fl">Distrito</label><input class="fc" id="cfg-dis" value="${CE.dist||''}"></div></div>
+        <div class="r2"><div class="fg"><label class="fl">Turno</label><select class="fc" id="cfg-tur"><option ${CE.turno==='Matutino'?'selected':''}>Matutino</option><option ${CE.turno==='Vespertino'?'selected':''}>Vespertino</option><option>Ambos</option></select></div><div class="fg"><label class="fl">Director(a)</label><input class="fc" id="cfg-dir" value="${CE.director||''}"></div></div>
+        <button class="btn bp" onclick="saveConfig()" style="width:100%;padding:10px">💾 Guardar</button>
       </div>
     </div>
     <div class="card">
-      <div class="ch"><span class="ct">👑 Correos Administradores</span></div>
-      <div class="cb">
-        <p style="font-size:11px;color:var(--mu);margin-bottom:10px">Estos correos tienen acceso completo. Edita el archivo HTML para agregar más:</p>
-        <div style="background:var(--bg);border-radius:8px;padding:12px;font-family:var(--mo);font-size:11px;color:var(--ac2)">
-          ${ADMIN_EMAILS.map(e=>`<div>✓ ${e}</div>`).join('')}
-        </div>
+      <div class="ch"><span class="ct">👑 Administradores</span></div>
+      <div class="cb"><p style="font-size:10px;color:var(--mu);margin-bottom:8px">Edita el HTML para agregar más admins:</p>
+        <div style="background:var(--bg);border-radius:7px;padding:10px;font-family:var(--mo);font-size:10px;color:var(--ac2)">${ADMIN_EMAILS.map(e=>`<div>✓ ${e}</div>`).join('')}</div>
       </div>
     </div>
   </div>`;
 }
-
 async function saveConfig(){
-  const cfg={
-    nombre:document.getElementById('cfg-nombre')?.value||'',
-    codigo:document.getElementById('cfg-codigo')?.value||'',
-    depto:document.getElementById('cfg-depto')?.value||'',
-    muni:document.getElementById('cfg-muni')?.value||'',
-    dist:document.getElementById('cfg-dist')?.value||'',
-    turno:document.getElementById('cfg-turno')?.value||'Matutino',
-    director:document.getElementById('cfg-director')?.value||'',
-  };
-  showLoading('Guardando...');
-  await db.collection('config').doc('centro').set(cfg);
-  CE=cfg;
-  hideLoading();
-  document.getElementById('ce-nombre-sb').textContent=CE.nombre||'Centro Escolar';
+  const cfg={nombre:document.getElementById('cfg-n')?.value||'',codigo:document.getElementById('cfg-cod')?.value||'',depto:document.getElementById('cfg-dep')?.value||'',muni:document.getElementById('cfg-mun')?.value||'',dist:document.getElementById('cfg-dis')?.value||'',turno:document.getElementById('cfg-tur')?.value||'Matutino',director:document.getElementById('cfg-dir')?.value||''};
+  showLoad('Guardando...'); await db.collection('config').doc('centro').set(cfg); CE=cfg; hideLoad();
+  document.getElementById('sb-ce').innerHTML=`CortesíaApp <small>${CE.nombre||'Centro Escolar'}</small>`;
   toast('✅ Configuración guardada','success');
 }
-
-// ══════════════════════════════════════════════════════
-//  ALUMNOS CRUD
-// ══════════════════════════════════════════════════════
-async function agregarAlumno(){
-  const nombre=document.getElementById('ma-nombre')?.value.trim();
-  const nie=document.getElementById('ma-nie')?.value.trim();
-  const sexo=document.getElementById('ma-sexo')?.value;
-  const grado=document.getElementById('ma-grado')?.value;
-  const sid=document.getElementById('ma-sec')?.value;
-  const lista=parseInt(document.getElementById('ma-lista')?.value)||ALUMNOS.length+1;
-  if(!nombre||!sid){ toast('Completa nombre y sección','error'); return; }
-  showLoading('Guardando...');
-  await db.collection('alumnos').add({nombre,nie,sexo,grado,seccionId:sid,lista,demeritos:0,creadoEn:new Date().toISOString()});
-  await loadAllData();
-  hideLoading(); closeModal('mo-alumno');
-  toast(`Alumno agregado: ${nombre}`,'success');
+async function addAlumno(){
+  const n=document.getElementById('ma-n')?.value.trim(),nie=document.getElementById('ma-nie')?.value.trim(),sx=document.getElementById('ma-sx')?.value,gr=document.getElementById('ma-gr')?.value,sid=document.getElementById('ma-sec')?.value,lst=parseInt(document.getElementById('ma-lst')?.value)||ALUMS.length+1;
+  if(!n||!sid){toast('Completa nombre y sección','error');return;}
+  showLoad('Guardando...');
+  await db.collection('alumnos').add({nombre:n,nie,sexo:sx,grado:gr,seccionId:sid,lista:lst,demeritos:0,creadoEn:new Date().toISOString()});
+  await loadAll(); hideLoad(); cm('mo-alum');
+  toast(`Alumno agregado: ${n}`,'success');
 }
 </script>
 </body>
